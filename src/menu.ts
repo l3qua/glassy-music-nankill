@@ -31,7 +31,7 @@ export type MenuTemplate = Electron.MenuItemConstructorOptions[];
 // True only if in-app-menu was loaded on launch
 const inAppMenuActive = await config.plugins.isEnabled('in-app-menu');
 
-const LOCKED_PLUGINS = ['better-lyrics', 'better-lyrics-shaders'];
+const LOCKED_PLUGINS = ['better-lyrics', 'better-lyrics-shaders', 'album-color-theme-modded'];
 
 const pluginEnabledMenu = async (
   plugin: string,
@@ -414,16 +414,17 @@ const htmlContent = `
                 </div>
                 <ul>
                     <li>Based on commit: <code style="">1d72d12</code></li>
+                    <li>✨ <strong>Rebrand the whole client</strong></li>
                     <li>Add new <strong>NonStop plugin</strong> 🎵</li>
                     <li>Add new <strong>Adblock</strong></li>
                     <li>Add new <strong>Better Lyrics Shaders</strong></li>
+                    <li>Add Low Performance Mode (for BLS)</li>
+                    <li>Add <strong>Album Color Theme (Modded)</strong></li>
                     <li>Update MERGE THEME from <span style="color:#00f2fe">V13</span> to <span style="color:#00f2fe">V14</span></li>
                     <li>Update Betterlyrics to <code>v2.2.0.2-canary</code></li>
+                    <li>Fixed some small bugs and optimize 🐛</li>
                     <li>Remove Update Check</li>
                     <li>Remove MERGE THEME dynamic background</li>
-                    <li>✨ <strong>Rebrand the whole client</strong></li>
-                    <li>Add Low Performance Mode for potato pc.</li>
-                    <li>Fixed some small bugs and optimize 🐛</li>
                 </ul>
             </div>
             

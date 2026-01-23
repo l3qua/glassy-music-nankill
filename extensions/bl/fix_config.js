@@ -35,28 +35,23 @@ const MY_CUSTOM_CSS = `
   --blyrics-background-filter: blur(70px) saturate(2.5) brightness(70%);
 }
 
-#player-bar-background {
-    opacity: 1 !important;            /* Giữ nguyên để "lừa" extension là nó đang hiện */
-    background: transparent !important; /* Biến màu nền thành trong suốt */
-    background-color: transparent !important; /* Thêm dòng này cho chắc */
-    box-shadow: none !important;      /* Xóa bóng đổ nếu có */
-    pointer-events: none !important;  /* Click xuyên qua */
+/* --- BƯỚC 2: Tắt Blur KHI VÀ CHỈ KHI Player đang mở --- */
+/* Logic: Kiểm tra nếu body có chứa #layout đang mở player -> thì tắt blur ở bar */
+body:has(#layout[player-ui-state="PLAYER_PAGE_OPEN"]) ytmusic-player-bar,
+body:has(#layout[player-ui-state="PLAYER_PAGE_OPEN"]) #player-bar-background {
+  backdrop-filter: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-/* ĐÃ FIX: Tắt hoàn toàn Glass Effect của các bar mặc định */
 #layout[player-ui-state="PLAYER_PAGE_OPEN"] #mini-guide-background,
 #layout[player-ui-state="PLAYER_PAGE_OPEN"] #nav-bar-background,
 #layout[player-ui-state="PLAYER_PAGE_OPEN"] #guide-wrapper {
   backdrop-filter: none !important; 
   background: transparent !important;
   border: none !important;
-}
-
-ytmusic-player-bar,
-#layout[player-ui-state="PLAYER_PAGE_OPEN"] ytmusic-player-bar {
-  backdrop-filter: none !important;
-  background-color: transparent !important;
-  border: none !important;
+  box-shadow: none !important;
 }
 
 /* Side Panel - Khung Lyric Kính */
