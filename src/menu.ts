@@ -407,6 +407,22 @@ const htmlContent = `
         <div class="changelog-label">What's New</div>
 
         <div class="scroll-area">
+        <div class="log-entry">
+                <div class="log-header">
+                    <span class="log-version">Version 3.12.1-beta</span>
+                    <span class="log-tag">BETA</span>
+                </div>
+                <ul>
+                    <li>Based on commit: <code style="">f50025f</code></li>
+                    <li>Update Better Lyrics to <code>2.2.0.3-canary</code></li>
+                    <li>Update Better Lyric Shaders to <code>v1.1.3</code></li>
+                    <li>Update MERGE THEME from <span style="color:#00f2fe">v14</span> to <span style="color:#00f2fe">v15</span></li>
+                    <li>Add fade effect for main background (MT)</li>
+                    <li>Add <strong>animated artwork</strong> (BLS)</li>
+                    <li>Some performance fix and optimize (BL, U) 🚀</li>
+                    <li>Now <strong>open-source</strong> 🌐</li>
+                </ul>
+            </div>
             <div class="log-entry">
                 <div class="log-header">
                     <span class="log-version">Version 3.12.0-beta</span>

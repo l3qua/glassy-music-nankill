@@ -1,7 +1,7 @@
 var e, t;
 ('function' == typeof (e = globalThis.define) && ((t = e), (e = null)),
-  (function (t, r, a, i, s) {
-    var n =
+  (function (t, r, a, i, n) {
+    var s =
         'undefined' != typeof globalThis
           ? globalThis
           : 'undefined' != typeof self
@@ -11,7 +11,7 @@ var e, t;
               : 'undefined' != typeof global
                 ? global
                 : {},
-      o = 'function' == typeof n[i] && n[i],
+      o = 'function' == typeof s[i] && s[i],
       l = o.cache || {},
       u =
         'undefined' != typeof module &&
@@ -20,12 +20,12 @@ var e, t;
     function g(e, r) {
       if (!l[e]) {
         if (!t[e]) {
-          var a = 'function' == typeof n[i] && n[i];
+          var a = 'function' == typeof s[i] && s[i];
           if (!r && a) return a(e, !0);
           if (o) return o(e, !0);
           if (u && 'string' == typeof e) return u(e);
-          var s = Error("Cannot find module '" + e + "'");
-          throw ((s.code = 'MODULE_NOT_FOUND'), s);
+          var n = Error("Cannot find module '" + e + "'");
+          throw ((n.code = 'MODULE_NOT_FOUND'), n);
         }
         ((c.resolve = function (r) {
           var a = t[e][1][r];
@@ -58,10 +58,10 @@ var e, t;
       }),
       Object.defineProperty(g, 'root', {
         get: function () {
-          return n[i];
+          return s[i];
         },
       }),
-      (n[i] = g));
+      (s[i] = g));
     for (var m = 0; m < r.length; m++) g(r[m]);
     if (a) {
       var c = g(a);
@@ -71,7 +71,7 @@ var e, t;
           ? e(function () {
               return c;
             })
-          : s && (this[s] = c);
+          : n && (this[n] = c);
     }
   })(
     {
@@ -79,35 +79,35 @@ var e, t;
         function (e, t, r) {
           var a = e('@parcel/transformer-js/src/esmodule-helpers.js');
           (a.defineInteropFlag(r), a.export(r, 'config', () => g));
-          var i = e('../shared/utils/logger'),
-            s = e('./lib/audioAnalysis'),
-            n = e('./lib/gradientController'),
+          var i = e('@/shared/utils/logger'),
+            n = e('./lib/audioAnalysis'),
+            s = e('./lib/gradientController'),
             o = e('./lib/kawarpManager'),
             l = e('./lib/messageHandler'),
             u = e('./lib/navigationManager');
           let g = { matches: ['https://music.youtube.com/*'], all_frames: !1 },
             m = async () => {
-              let e = await n.initializeSettings();
+              let e = await s.initializeSettings();
               ((0, i.logger).log('Better Lyrics Shaders: Initializing...'),
                 (0, i.logger).log('Loaded settings:', e),
                 (0, i.logger).log('Effects enabled:', e.enabled),
                 o.cleanupOrphanedKawarps(),
                 l.setupMessageListener({
-                  onSettingsUpdate: n.updateGradientSettings,
+                  onSettingsUpdate: s.updateGradientSettings,
                   getCurrentData: () => {
                     let e = l.getSongInfo();
                     return {
                       songTitle: e.title,
                       songAuthor: e.author,
-                      gradientSettings: n.getSettings(),
+                      gradientSettings: s.getSettings(),
                     };
                   },
                 }),
-                s.initializeAudioAnalysis(),
+                n.initializeAudioAnalysis(),
                 setTimeout(async () => {
-                  await n.checkAndUpdateGradient();
+                  await s.checkAndUpdateGradient();
                   for (let e = 10; e > 0; e--) {
-                    if (n.hasActiveEffect()) {
+                    if (s.hasActiveEffect()) {
                       (0, i.logger).log('Effect initialized, stopping retry');
                       break;
                     }
@@ -115,22 +115,22 @@ var e, t;
                       `Effect not ready yet, retrying... (${e} retries left)`,
                     ),
                       await new Promise((e) => setTimeout(e, 500)),
-                      await n.checkAndUpdateGradient(),
+                      await s.checkAndUpdateGradient(),
                       1 === e && (0, i.logger).log('Max retries reached'));
                   }
-                  (n.startAudioIfEnabled(),
-                    u.initialize(n.checkAndUpdateGradient));
+                  (s.startAudioIfEnabled(),
+                    u.initialize(s.checkAndUpdateGradient));
                 }, 0));
             };
           (window.addEventListener('beforeunload', () => {
-            (u.cleanup(), n.cleanup());
+            (u.cleanup(), s.cleanup());
           }),
             'loading' === document.readyState
               ? document.addEventListener('DOMContentLoaded', m)
               : m());
         },
         {
-          '../shared/utils/logger': '4b2II',
+          '@/shared/utils/logger': '4b2II',
           './lib/audioAnalysis': '5x9EN',
           './lib/gradientController': 'fIZjQ',
           './lib/kawarpManager': '3bNxI',
@@ -142,26 +142,26 @@ var e, t;
       '4b2II': [
         function (e, t, r) {
           var a = e('@parcel/transformer-js/src/esmodule-helpers.js');
-          (a.defineInteropFlag(r), a.export(r, 'logger', () => n));
+          (a.defineInteropFlag(r), a.export(r, 'logger', () => s));
           let i = '[BLS]',
-            s = !0,
-            n = {
+            n = !0,
+            s = {
               log: (...e) => {
-                s && console.log(i, ...e);
+                n && console.log(i, ...e);
               },
               info: (...e) => {
-                s && console.info(i, ...e);
+                n && console.info(i, ...e);
               },
               warn: (...e) => {
-                s && console.warn(i, ...e);
+                n && console.warn(i, ...e);
               },
               error: (...e) => {
                 console.error(i, ...e);
               },
               setEnabled: (e) => {
-                s = e;
+                n = e;
               },
-              isEnabled: () => s,
+              isEnabled: () => n,
             };
         },
         { '@parcel/transformer-js/src/esmodule-helpers.js': 'fRZO2' },
@@ -206,10 +206,10 @@ var e, t;
             a.export(r, 'checkAndReconnectElement', () => h),
             a.export(r, 'isAudioInitialized', () => f),
             a.export(r, 'setPlaybackStateCallback', () => A),
-            a.export(r, 'isPlaying', () => x));
-          var i = e('../../shared/utils/logger');
-          let s = new WeakSet(),
-            n = {
+            a.export(r, 'isPlaying', () => y));
+          var i = e('@/shared/utils/logger');
+          let n = new WeakSet(),
+            s = {
               context: null,
               analyser: null,
               source: null,
@@ -226,78 +226,78 @@ var e, t;
             },
             o = { speedMultiplier: 1, scaleMultiplier: 1 },
             l = (e) => {
-              (n.playHandler && e.removeEventListener('play', n.playHandler),
-                n.pauseHandler &&
-                  e.removeEventListener('pause', n.pauseHandler));
+              (s.playHandler && e.removeEventListener('play', s.playHandler),
+                s.pauseHandler &&
+                  e.removeEventListener('pause', s.pauseHandler));
             },
             u = (e) => {
-              ((n.playHandler = () => {
-                n.onPlaybackStateChange && n.onPlaybackStateChange(!0);
+              ((s.playHandler = () => {
+                s.onPlaybackStateChange && s.onPlaybackStateChange(!0);
               }),
-                (n.pauseHandler = () => {
-                  n.onPlaybackStateChange && n.onPlaybackStateChange(!1);
+                (s.pauseHandler = () => {
+                  s.onPlaybackStateChange && s.onPlaybackStateChange(!1);
                 }),
-                e.addEventListener('play', n.playHandler),
-                e.addEventListener('pause', n.pauseHandler));
+                e.addEventListener('play', s.playHandler),
+                e.addEventListener('pause', s.pauseHandler));
             },
             g = async () => {
-              if (!n.isInitialized)
+              if (!s.isInitialized)
                 try {
                   if (
-                    ((n.element = document.querySelector('audio, video')),
-                    !n.element)
+                    ((s.element = document.querySelector('audio, video')),
+                    !s.element)
                   ) {
-                    n.initTimeoutId = window.setTimeout(g, 1e3);
+                    s.initTimeoutId = window.setTimeout(g, 1e3);
                     return;
                   }
-                  ((n.initTimeoutId = null),
-                    (n.context = new (
+                  ((s.initTimeoutId = null),
+                    (s.context = new (
                       window.AudioContext || window.webkitAudioContext
                     )()),
-                    'suspended' === n.context.state &&
-                      (n.resumeContextHandler &&
+                    'suspended' === s.context.state &&
+                      (s.resumeContextHandler &&
                         (document.removeEventListener(
                           'click',
-                          n.resumeContextHandler,
+                          s.resumeContextHandler,
                         ),
                         document.removeEventListener(
                           'keydown',
-                          n.resumeContextHandler,
+                          s.resumeContextHandler,
                         )),
-                      (n.resumeContextHandler = async () => {
-                        (n.context &&
-                          'suspended' === n.context.state &&
-                          (await n.context.resume()),
-                          n.resumeContextHandler &&
+                      (s.resumeContextHandler = async () => {
+                        (s.context &&
+                          'suspended' === s.context.state &&
+                          (await s.context.resume()),
+                          s.resumeContextHandler &&
                             (document.removeEventListener(
                               'click',
-                              n.resumeContextHandler,
+                              s.resumeContextHandler,
                             ),
                             document.removeEventListener(
                               'keydown',
-                              n.resumeContextHandler,
+                              s.resumeContextHandler,
                             ),
-                            (n.resumeContextHandler = null)));
+                            (s.resumeContextHandler = null)));
                       }),
                       document.addEventListener(
                         'click',
-                        n.resumeContextHandler,
+                        s.resumeContextHandler,
                       ),
                       document.addEventListener(
                         'keydown',
-                        n.resumeContextHandler,
+                        s.resumeContextHandler,
                       )),
-                    (n.analyser = n.context.createAnalyser()),
-                    (n.analyser.fftSize = 1024),
-                    (n.analyser.smoothingTimeConstant = 0.8));
-                  let e = n.analyser.frequencyBinCount;
-                  ((n.dataArray = new Uint8Array(new ArrayBuffer(e))),
-                    (n.source = n.context.createMediaElementSource(n.element)),
-                    n.source.connect(n.analyser),
-                    n.source.connect(n.context.destination),
-                    s.add(n.element),
-                    u(n.element),
-                    (n.isInitialized = !0),
+                    (s.analyser = s.context.createAnalyser()),
+                    (s.analyser.fftSize = 1024),
+                    (s.analyser.smoothingTimeConstant = 0.8));
+                  let e = s.analyser.frequencyBinCount;
+                  ((s.dataArray = new Uint8Array(new ArrayBuffer(e))),
+                    (s.source = s.context.createMediaElementSource(s.element)),
+                    s.source.connect(s.analyser),
+                    s.source.connect(s.context.destination),
+                    n.add(s.element),
+                    u(s.element),
+                    (s.isInitialized = !0),
                     (0, i.logger).log(
                       'Audio analysis initialized (passthrough mode)',
                     ));
@@ -306,90 +306,90 @@ var e, t;
                 }
             },
             m = (e, t, r) => {
-              if (!n.analyser || !n.dataArray || !n.element) {
-                n.rafId = null;
+              if (!s.analyser || !s.dataArray || !s.element) {
+                s.rafId = null;
                 return;
               }
-              if (r - n.lastAnalysisTime >= 100) {
-                n.analyser.getByteTimeDomainData(n.dataArray);
-                let a = n.element.volume,
+              if (r - s.lastAnalysisTime >= 100) {
+                s.analyser.getByteTimeDomainData(s.dataArray);
+                let a = s.element.volume,
                   i = a > 0.005 ? 1 / a : 1,
-                  s = 0,
-                  l = n.dataArray.length,
+                  n = 0,
+                  l = s.dataArray.length,
                   u = e.audioBeatThreshold;
                 for (let e = 0; e < l; e++) {
-                  let t = Math.abs(n.dataArray[e] - 128) / 128,
+                  let t = Math.abs(s.dataArray[e] - 128) / 128,
                     r = t * i;
-                  if (r > s && (s = r) > u) break;
+                  if (r > n && (n = r) > u) break;
                 }
-                let g = s > u,
+                let g = n > u,
                   m = e.kawarpAudioScaleBoost;
                 ((o.speedMultiplier =
                   e.audioResponsive && g ? e.audioSpeedMultiplier : 1),
                   (o.scaleMultiplier =
                     e.audioResponsive && g ? 1 + m / 100 : 1),
                   t(o),
-                  (n.lastAnalysisTime = r));
+                  (s.lastAnalysisTime = r));
               }
-              n.rafId = requestAnimationFrame((r) => m(e, t, r));
+              s.rafId = requestAnimationFrame((r) => m(e, t, r));
             },
             c = (e, t) => {
-              (null !== n.rafId && cancelAnimationFrame(n.rafId),
-                (n.lastAnalysisTime = 0),
-                (n.rafId = requestAnimationFrame((r) => m(e, t, r))));
+              (null !== s.rafId && cancelAnimationFrame(s.rafId),
+                (s.lastAnalysisTime = 0),
+                (s.rafId = requestAnimationFrame((r) => m(e, t, r))));
             },
             d = () => {
-              (null !== n.rafId &&
-                (cancelAnimationFrame(n.rafId), (n.rafId = null)),
-                null !== n.initTimeoutId &&
-                  (clearTimeout(n.initTimeoutId), (n.initTimeoutId = null)),
-                (n.lastAnalysisTime = 0));
+              (null !== s.rafId &&
+                (cancelAnimationFrame(s.rafId), (s.rafId = null)),
+                null !== s.initTimeoutId &&
+                  (clearTimeout(s.initTimeoutId), (s.initTimeoutId = null)),
+                (s.lastAnalysisTime = 0));
             },
             p = (e) => {
-              if (!n.context) return;
-              if ((n.element && l(n.element), s.has(e))) {
+              if (!s.context) return;
+              if ((s.element && l(s.element), n.has(e))) {
                 ((0, i.logger).log(
                   'Element already has MediaElementSource, re-adding listeners',
                 ),
-                  (n.element = e),
+                  (s.element = e),
                   u(e));
                 return;
               }
-              ((n.analyser = n.context.createAnalyser()),
-                (n.analyser.fftSize = 1024),
-                (n.analyser.smoothingTimeConstant = 0.8));
-              let t = n.analyser.frequencyBinCount;
-              ((n.dataArray = new Uint8Array(new ArrayBuffer(t))),
-                (n.source = n.context.createMediaElementSource(e)),
-                n.source.connect(n.analyser),
-                n.source.connect(n.context.destination),
-                s.add(e),
-                (n.element = e),
+              ((s.analyser = s.context.createAnalyser()),
+                (s.analyser.fftSize = 1024),
+                (s.analyser.smoothingTimeConstant = 0.8));
+              let t = s.analyser.frequencyBinCount;
+              ((s.dataArray = new Uint8Array(new ArrayBuffer(t))),
+                (s.source = s.context.createMediaElementSource(e)),
+                s.source.connect(s.analyser),
+                s.source.connect(s.context.destination),
+                n.add(e),
+                (s.element = e),
                 u(e),
                 (0, i.logger).log('Audio analysis reconnected to new element'));
             },
             h = () => {
-              if (!n.isInitialized) return;
+              if (!s.isInitialized) return;
               let e = document.querySelector('audio, video');
-              e && e !== n.element
+              e && e !== s.element
                 ? ((0, i.logger).log('Audio element changed, reconnecting...'),
                   p(e))
-                : n.element &&
-                  !document.contains(n.element) &&
+                : s.element &&
+                  !document.contains(s.element) &&
                   e &&
                   ((0, i.logger).log(
                     'Old audio element detached, reconnecting to new one...',
                   ),
                   p(e));
             },
-            f = () => n.isInitialized,
+            f = () => s.isInitialized,
             A = (e) => {
-              n.onPlaybackStateChange = e;
+              s.onPlaybackStateChange = e;
             },
-            x = () => !!n.element && !n.element.paused;
+            y = () => !!s.element && !s.element.paused;
         },
         {
-          '../../shared/utils/logger': '4b2II',
+          '@/shared/utils/logger': '4b2II',
           '@parcel/transformer-js/src/esmodule-helpers.js': 'fRZO2',
         },
       ],
@@ -398,27 +398,28 @@ var e, t;
           let a;
           var i = e('@parcel/transformer-js/src/esmodule-helpers.js');
           (i.defineInteropFlag(r),
-            i.export(r, 'checkAndUpdateGradient', () => A),
+            i.export(r, 'checkAndUpdateGradient', () => y),
             i.export(r, 'updateGradientSettings', () => x),
-            i.export(r, 'initializeSettings', () => y),
-            i.export(r, 'getSettings', () => b),
-            i.export(r, 'getDynamicMultipliers', () => w),
-            i.export(r, 'startAudioIfEnabled', () => v),
-            i.export(r, 'hasActiveEffect', () => T),
-            i.export(r, 'cleanup', () => E));
-          var s = e('../../shared/constants/gradientSettings'),
-            n = e('../../shared/utils/logger'),
-            o = e('./audioAnalysis'),
-            l = e('./kawarpManager'),
-            u = e('./storage');
-          let g = { ...s.DEFAULT_DYNAMIC_MULTIPLIERS },
-            m = () => {
+            i.export(r, 'initializeSettings', () => b),
+            i.export(r, 'getSettings', () => w),
+            i.export(r, 'getDynamicMultipliers', () => v),
+            i.export(r, 'startAudioIfEnabled', () => T),
+            i.export(r, 'hasActiveEffect', () => E),
+            i.export(r, 'cleanup', () => S));
+          var n = e('@/shared/constants/gradientSettings'),
+            s = e('@/shared/utils/logger'),
+            o = e('./animatedArtManager'),
+            l = e('./audioAnalysis'),
+            u = e('./kawarpManager'),
+            g = e('./storage');
+          let m = { ...n.DEFAULT_DYNAMIC_MULTIPLIERS },
+            c = () => {
               let e = !!document.getElementById('player-page'),
                 t = !!document.getElementById('search-page'),
                 r = !!document.querySelector(
                   '.background-gradient.style-scope.ytmusic-browse-response',
                 );
-              return ((0, n.logger).log('getCurrentPageType check:', {
+              return ((0, s.logger).log('getCurrentPageType check:', {
                 hasPlayerPage: e,
                 hasSearchPage: t,
                 hasHomepageGradient: r,
@@ -431,50 +432,52 @@ var e, t;
                     ? 'homepage'
                     : 'other';
             },
-            c = (e) =>
+            d = (e) =>
               'player' === e
                 ? 'player-page'
                 : 'search' === e
                   ? 'search-page'
                   : 'homepage',
-            d = (e) => {
-              ((g = e), l.updateKawarpSpeed(a, g));
-            },
             p = (e) => {
+              ((m = e), u.updateKawarpSpeed(a, m));
+            },
+            h = (e) => {
               a.pauseOnInactive &&
-                ((0, n.logger).log(
+                ((0, s.logger).log(
                   'Playback state changed:',
                   e ? 'playing' : 'paused',
                 ),
-                e ? l.resumeKawarp() : l.pauseKawarp());
-            },
-            h = () => {
-              a.audioResponsive && o.isAudioInitialized()
-                ? o.startAudioAnalysis(a, d)
-                : ((g = { speedMultiplier: 1, scaleMultiplier: 1 }),
-                  l.updateKawarpSpeed(a, g));
+                e
+                  ? (u.resumeKawarp(), o.resumeAnimatedArt())
+                  : (u.pauseKawarp(), o.pauseAnimatedArt()));
             },
             f = () => {
-              (l.hasKawarp('homepage') &&
-                ((0, n.logger).log('Removing homepage kawarp'),
-                l.destroyKawarp('homepage')),
-                l.hasKawarp('search') &&
-                  ((0, n.logger).log('Removing search kawarp'),
-                  l.destroyKawarp('search')));
+              a.audioResponsive && l.isAudioInitialized()
+                ? l.startAudioAnalysis(a, p)
+                : ((m = { speedMultiplier: 1, scaleMultiplier: 1 }),
+                  u.updateKawarpSpeed(a, m));
             },
-            A = async () => {
+            A = () => {
+              (u.hasKawarp('homepage') &&
+                ((0, s.logger).log('Removing homepage kawarp'),
+                u.destroyKawarp('homepage')),
+                u.hasKawarp('search') &&
+                  ((0, s.logger).log('Removing search kawarp'),
+                  u.destroyKawarp('search')));
+            },
+            y = async () => {
               if (!a.enabled) {
-                (0, n.logger).log(
+                (0, s.logger).log(
                   'Effects disabled - skipping gradient update',
                 );
                 return;
               }
-              let e = m(),
-                t = l.hasKawarp('player'),
-                r = l.hasKawarp('homepage'),
-                i = l.hasKawarp('search');
+              let e = c(),
+                t = u.hasKawarp('player'),
+                r = u.hasKawarp('homepage'),
+                i = u.hasKawarp('search');
               if (
-                ((0, n.logger).log('checkAndUpdateGradient', {
+                ((0, s.logger).log('checkAndUpdateGradient', {
                   pageType: e,
                   hasPlayerEffect: t,
                   hasHomepageEffect: r,
@@ -483,91 +486,97 @@ var e, t;
                 }),
                 'player' === e)
               )
-                ((0, n.logger).log('On player page - creating/updating kawarp'),
+                ((0, s.logger).log('On player page - creating/updating kawarp'),
                   t
-                    ? await l.updateKawarpImage('player')
-                    : await l.createKawarp(a, g, 'player-page'),
+                    ? await u.updateKawarpImage('player')
+                    : await u.createKawarp(a, m, 'player-page'),
                   a.showOnBrowsePages
-                    ? (r && (await l.updateKawarpImage('homepage')),
-                      i && (await l.updateKawarpImage('search')),
+                    ? (r && (await u.updateKawarpImage('homepage')),
+                      i && (await u.updateKawarpImage('search')),
                       r ||
-                        ((0, n.logger).log('Creating homepage kawarp'),
-                        await l.createKawarp(a, g, 'homepage')),
+                        ((0, s.logger).log('Creating homepage kawarp'),
+                        await u.createKawarp(a, m, 'homepage')),
                       i ||
-                        ((0, n.logger).log('Creating search kawarp'),
-                        await l.createKawarp(a, g, 'search-page')))
-                    : f());
+                        ((0, s.logger).log('Creating search kawarp'),
+                        await u.createKawarp(a, m, 'search-page')))
+                    : A());
               else if ('homepage' === e || 'search' === e) {
                 if (a.showOnBrowsePages) {
-                  let t = c(e),
-                    s = 'homepage' === e ? r : i;
-                  ((0, n.logger).log(`On ${e} - showOnBrowsePages enabled`, {
-                    hasTargetEffect: s,
+                  let t = d(e),
+                    n = 'homepage' === e ? r : i;
+                  ((0, s.logger).log(`On ${e} - showOnBrowsePages enabled`, {
+                    hasTargetEffect: n,
                   }),
-                    s ||
-                      ((0, n.logger).log(`Creating ${e} kawarp`),
-                      await l.createKawarp(a, g, t)));
-                } else f();
+                    n ||
+                      ((0, s.logger).log(`Creating ${e} kawarp`),
+                      await u.createKawarp(a, m, t)));
+                } else A();
                 t &&
-                  ((0, n.logger).log(
+                  ((0, s.logger).log(
                     'Not on player page - removing player effect',
                   ),
-                  l.destroyKawarp('player'));
+                  u.destroyKawarp('player'));
               } else
-                ((0, n.logger).log('On other page - removing all effects'),
-                  l.destroyKawarp());
+                ((0, s.logger).log('On other page - removing all effects'),
+                  u.destroyKawarp());
             },
             x = async (e) => {
               let t = a.enabled,
                 r = a.audioResponsive,
                 i = a.showOnBrowsePages,
-                s = a.pauseOnInactive,
-                u =
+                n = a.pauseOnInactive,
+                g = a.enableAnimatedArt,
+                c =
                   a.audioSpeedMultiplier !== e.audioSpeedMultiplier ||
                   a.kawarpAudioScaleBoost !== e.kawarpAudioScaleBoost ||
                   a.audioBeatThreshold !== e.audioBeatThreshold;
               if (
-                ((a = e), (0, n.logger).setEnabled(e.showLogs), t !== e.enabled)
+                ((a = e),
+                g !== e.enableAnimatedArt && o.setEnabled(e.enableAnimatedArt),
+                (0, s.logger).setEnabled(e.showLogs),
+                t !== e.enabled)
               ) {
                 e.enabled
-                  ? ((0, n.logger).log('Effects enabled - reinitializing'),
-                    await A(),
-                    e.audioResponsive && o.startAudioAnalysis(e, d))
-                  : ((0, n.logger).log(
+                  ? ((0, s.logger).log('Effects enabled - reinitializing'),
+                    await y(),
+                    e.audioResponsive && l.startAudioAnalysis(e, p))
+                  : ((0, s.logger).log(
                       'Effects disabled - destroying all kawarp instances',
                     ),
-                    l.destroyKawarp(),
-                    o.stopAudioAnalysis());
+                    u.destroyKawarp(),
+                    l.stopAudioAnalysis());
                 return;
               }
               e.enabled &&
-                ((r !== e.audioResponsive || u) && h(),
-                i !== e.showOnBrowsePages && (await A()),
-                s === e.pauseOnInactive ||
-                  (e.pauseOnInactive && o.isAudioInitialized() && !o.isPlaying()
-                    ? l.pauseKawarp()
-                    : e.pauseOnInactive || l.resumeKawarp()),
-                l.hasKawarp() && l.updateKawarpSettings(e, g));
+                ((r !== e.audioResponsive || c) && f(),
+                i !== e.showOnBrowsePages && (await y()),
+                n === e.pauseOnInactive ||
+                  (e.pauseOnInactive && l.isAudioInitialized() && !l.isPlaying()
+                    ? u.pauseKawarp()
+                    : e.pauseOnInactive || u.resumeKawarp()),
+                u.hasKawarp() && u.updateKawarpSettings(e, m));
             },
-            y = async () => (
-              (a = await u.loadGradientSettings()),
-              (0, n.logger).setEnabled(a.showLogs),
-              o.setPlaybackStateCallback(p),
+            b = async () => (
+              (a = await g.loadGradientSettings()),
+              (0, s.logger).setEnabled(a.showLogs),
+              l.setPlaybackStateCallback(h),
+              o.initialize(a.enableAnimatedArt),
               a
             ),
-            b = () => a,
-            w = () => g,
-            v = () => {
-              a.enabled && a.audioResponsive && o.startAudioAnalysis(a, d);
+            w = () => a,
+            v = () => m,
+            T = () => {
+              a.enabled && a.audioResponsive && l.startAudioAnalysis(a, p);
             },
-            T = () => l.hasKawarp('player'),
-            E = () => {
-              (o.stopAudioAnalysis(), l.destroyKawarp());
+            E = () => u.hasKawarp('player'),
+            S = () => {
+              (l.stopAudioAnalysis(), u.destroyKawarp(), o.cleanup());
             };
         },
         {
-          '../../shared/constants/gradientSettings': '2tB0U',
-          '../../shared/utils/logger': '4b2II',
+          '@/shared/constants/gradientSettings': '2tB0U',
+          '@/shared/utils/logger': '4b2II',
+          './animatedArtManager': 'eNnJ8',
           './audioAnalysis': '5x9EN',
           './kawarpManager': '3bNxI',
           './storage': '56Z7d',
@@ -579,8 +588,8 @@ var e, t;
           var a = e('@parcel/transformer-js/src/esmodule-helpers.js');
           (a.defineInteropFlag(r),
             a.export(r, 'DEFAULT_GRADIENT_SETTINGS', () => i),
-            a.export(r, 'DEFAULT_DYNAMIC_MULTIPLIERS', () => s),
-            a.export(r, 'GRADIENT_SETTINGS_STORAGE_KEY', () => n));
+            a.export(r, 'DEFAULT_DYNAMIC_MULTIPLIERS', () => n),
+            a.export(r, 'GRADIENT_SETTINGS_STORAGE_KEY', () => s));
           let i = {
               enabled: !0,
               kawarpOpacity: 0.8,
@@ -594,12 +603,701 @@ var e, t;
               audioResponsive: !0,
               audioSpeedMultiplier: 2,
               audioBeatThreshold: 0.8,
-              pauseOnInactive: !1,
+              pauseOnInactive: !0,
               showLogs: !0,
               showOnBrowsePages: !1,
+              enableAnimatedArt: !0,
             },
-            s = { speedMultiplier: 1, scaleMultiplier: 1 },
-            n = 'gradientSettings';
+            n = { speedMultiplier: 1, scaleMultiplier: 1 },
+            s = 'gradientSettings';
+        },
+        { '@parcel/transformer-js/src/esmodule-helpers.js': 'fRZO2' },
+      ],
+      'eNnJ8': [
+        function (e, t, r) {
+          var a = e('@parcel/transformer-js/src/esmodule-helpers.js');
+          (a.defineInteropFlag(r),
+            a.export(r, 'initialize', () => v),
+            a.export(r, 'setEnabled', () => T),
+            a.export(r, 'cleanup', () => E),
+            a.export(r, 'pauseAnimatedArt', () => S),
+            a.export(r, 'resumeAnimatedArt', () => I));
+          var i = e('@plasmohq/storage'),
+            n = e('@/shared/utils/logger');
+          let s = 'bls-video',
+            o = new i.Storage(),
+            l = !1,
+            u = null,
+            g = null,
+            m = null,
+            c = new Map();
+          function d() {
+            m && (m.abort(), (m = null));
+          }
+          async function p(e = 10, t = 100) {
+            for (let r = 0; r < e; r++) {
+              let e = (function () {
+                let e =
+                  document.querySelector(
+                    'yt-formatted-string.byline.ytmusic-player-bar',
+                  ) ||
+                  document.querySelector(
+                    '.subtitle.ytmusic-player-bar yt-formatted-string.byline',
+                  ) ||
+                  document.querySelector('ytmusic-player-bar .byline');
+                if (!e) return null;
+                let t = e.querySelectorAll('a');
+                return (
+                  (t.length >= 2 && t[t.length - 1].textContent?.trim()) || null
+                );
+              })();
+              if (e)
+                return (
+                  (0, n.logger).log(
+                    'Animated art: extracted album from DOM:',
+                    e,
+                  ),
+                  e
+                );
+              await new Promise((e) => setTimeout(e, t));
+            }
+            return (
+              (0, n.logger).log(
+                'Animated art: byline element not found after retries',
+              ),
+              null
+            );
+          }
+          function h(e) {
+            return !(
+              !e ||
+              0 === e.length ||
+              '\u2022' === e ||
+              '&' === e ||
+              e.includes('views') ||
+              e.includes('likes')
+            );
+          }
+          async function f(e, t, r, a, i) {
+            let s = `bls_${t}|${a}`;
+            try {
+              let e = await o.get(s);
+              if (void 0 !== e) {
+                if ('string' == typeof e)
+                  return (
+                    (0, n.logger).log(
+                      `Animated art: cache hit for "${t} - ${a}"`,
+                      { cacheKey: s },
+                    ),
+                    e
+                  );
+                if ('object' == typeof e && 'notFoundAt' in e) {
+                  let r = Date.now() - e.notFoundAt >= 6048e5;
+                  if (!r)
+                    return (
+                      (0, n.logger).log(
+                        `Animated art: cache hit (not found) for "${t} - ${a}"`,
+                        { cacheKey: s },
+                      ),
+                      null
+                    );
+                  (0, n.logger).log(
+                    `Animated art: not-found cache expired for "${t} - ${a}"`,
+                    { cacheKey: s },
+                  );
+                }
+              }
+            } catch (e) {
+              (0, n.logger).log('Animated art: cache read error', e);
+            }
+            (0, n.logger).log(`Animated art: fetching for "${t} - ${a}"`, {
+              cacheKey: s,
+            });
+            let l = new URLSearchParams({
+                s: e,
+                a: t,
+                d: Math.round(r).toString(),
+                al: a,
+              }),
+              u = `https://artwork.boidu.dev?${l.toString()}`;
+            try {
+              let e = await fetch(u, { signal: i });
+              if (!e.ok)
+                return (
+                  (0, n.logger).log('Animated art: API error', e.status),
+                  null
+                );
+              let r = await e.json();
+              return (
+                r.videoUrl
+                  ? (await o.set(s, r.videoUrl),
+                    (0, n.logger).log(`Animated art: cached "${t} - ${a}"`, {
+                      cacheKey: s,
+                    }))
+                  : (await o.set(s, { notFoundAt: Date.now() }),
+                    (0, n.logger).log(
+                      `Animated art: cached not-found for "${t} - ${a}"`,
+                      { cacheKey: s },
+                    )),
+                r.videoUrl
+              );
+            } catch (e) {
+              return ((0, n.logger).log('Animated art: fetch error', e), null);
+            }
+          }
+          function A() {
+            return document.querySelector(`#${s}`);
+          }
+          function y() {
+            let e = A();
+            if (!e) return;
+            let t = e.parentElement;
+            (e.remove(), t && (t.style.isolation = ''));
+          }
+          async function x() {
+            if (!l || !u) return;
+            let { videoId: e, song: t, artist: r, duration: a } = u;
+            if (e === g) return;
+            ((g = e), d());
+            let i = c.get(e);
+            (!i && (i = (await p()) || '') && c.set(e, i),
+              (0, n.logger).log('Animated art: fetching', {
+                song: t,
+                artist: r,
+                album: i,
+                videoId: e,
+              }),
+              (m = new AbortController()));
+            let o = await f(t, r, a, i, m.signal);
+            ((m = null),
+              l &&
+                e === u?.videoId &&
+                (o
+                  ? (function (e) {
+                      let t = document.querySelector('#thumbnail');
+                      if (!t) {
+                        (0, n.logger).log('Animated art: #thumbnail not found');
+                        return;
+                      }
+                      let r = t.querySelector(`#${s}`);
+                      (r && r.remove(), (t.style.isolation = 'isolate'));
+                      let a = (function (e) {
+                        let t = document.createElement('video');
+                        ((t.id = s),
+                          (t.muted = !0),
+                          (t.autoplay = !0),
+                          (t.loop = !0),
+                          (t.playsInline = !0),
+                          (t.style.cssText =
+                            'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2;opacity:0;transition:opacity 500ms ease-in;'),
+                          t.addEventListener(
+                            'canplay',
+                            () => {
+                              t.style.opacity = '1';
+                            },
+                            { once: !0 },
+                          ));
+                        let r = document.createElement('source');
+                        return (
+                          (r.src = e),
+                          (r.type = 'video/mp4'),
+                          t.appendChild(r),
+                          t
+                        );
+                      })(e);
+                      (t.appendChild(a),
+                        (0, n.logger).log('Animated art: video injected'));
+                    })(o)
+                  : y()));
+          }
+          function b(e) {
+            if (!l) return;
+            let { videoId: t, song: r, artist: a, duration: i } = e.detail;
+            (u &&
+              u.videoId !== t &&
+              ((0, n.logger).log(
+                'Animated art: song changed, clearing old artwork',
+              ),
+              d(),
+              y(),
+              (g = null)),
+              (u = { videoId: t, song: r, artist: a, duration: i }),
+              x());
+          }
+          function w(e) {
+            if (!l) return;
+            let { url: t, requestJson: r, responseJson: a } = e.detail;
+            t.includes('/youtubei/v1/next') &&
+              ((function (e, t) {
+                try {
+                  let r = e?.videoId,
+                    a = t?.currentVideoEndpoint,
+                    i = a?.watchEndpoint,
+                    n = i?.videoId,
+                    s = t?.contents,
+                    o = s?.singleColumnMusicWatchNextResultsRenderer,
+                    l = o?.tabbedRenderer,
+                    u = l?.watchNextTabbedResultsRenderer,
+                    g = u?.tabs,
+                    m = null;
+                  if (g)
+                    for (let e of g) {
+                      let t = e?.tabRenderer,
+                        r = t?.content,
+                        a = r?.musicQueueRenderer,
+                        i = a?.content,
+                        n = i?.playlistPanelRenderer,
+                        s = n?.contents;
+                      if (s) {
+                        m = s;
+                        break;
+                      }
+                    }
+                  if (!m) {
+                    let e = t?.continuationContents,
+                      r = e?.playlistPanelContinuation;
+                    m = r?.contents;
+                  }
+                  if (!m) {
+                    let e = t?.onResponseReceivedEndpoints;
+                    if (e?.[0]) {
+                      let t = e[0]?.queueUpdateCommand,
+                        r = t?.inlineContents,
+                        a = r?.playlistPanelRenderer;
+                      m = a?.contents;
+                    }
+                  }
+                  m &&
+                    (function (e) {
+                      for (let t of e) {
+                        let e =
+                          t.playlistPanelVideoRenderer ||
+                          t.playlistPanelVideoWrapperRenderer?.primaryRenderer
+                            ?.playlistPanelVideoRenderer;
+                        if (e?.videoId && e.longBylineText) {
+                          let t = (function (e) {
+                            let t = e.runs.map((e) => e.text?.trim()).filter(h);
+                            return (t.length >= 2 && t[t.length - 2]) || '';
+                          })(e.longBylineText);
+                          t && c.set(e.videoId, t);
+                        }
+                      }
+                      if (c.size > 100) {
+                        let e = Array.from(c.keys());
+                        for (let t = 0; t < 50; t++) c.delete(e[t]);
+                      }
+                    })(m);
+                  let d = t?.playerOverlays,
+                    p = d?.playerOverlayRenderer,
+                    f = p?.browserMediaSession,
+                    A = f?.browserMediaSessionRenderer;
+                  if (A) {
+                    let e = A?.album?.runs,
+                      t = e?.[0]?.text;
+                    t && (r && c.set(r, t), n && n !== r && c.set(n, t));
+                  }
+                } catch (e) {
+                  (0, n.logger).log('Animated art: extraction error', e);
+                }
+              })(r, a),
+              x());
+          }
+          function v(e) {
+            ((l = e),
+              e &&
+                (document.addEventListener('bls-send-player-time', b),
+                document.addEventListener('bls-send-response', w)));
+          }
+          function T(e) {
+            let t = l;
+            ((l = e),
+              e && !t
+                ? (document.addEventListener('bls-send-player-time', b),
+                  document.addEventListener('bls-send-response', w))
+                : !e && t && E());
+          }
+          function E() {
+            (d(),
+              document.removeEventListener('bls-send-player-time', b),
+              document.removeEventListener('bls-send-response', w),
+              y(),
+              (u = null),
+              (g = null),
+              c.clear(),
+              (l = !1));
+          }
+          function S() {
+            let e = A();
+            e && (e.pause(), (0, n.logger).log('Animated art: paused'));
+          }
+          function I() {
+            let e = A();
+            e && (e.play(), (0, n.logger).log('Animated art: resumed'));
+          }
+        },
+        {
+          '@plasmohq/storage': '25Hq9',
+          '@/shared/utils/logger': '4b2II',
+          '@parcel/transformer-js/src/esmodule-helpers.js': 'fRZO2',
+        },
+      ],
+      '25Hq9': [
+        function (e, t, r) {
+          var a = e('@parcel/transformer-js/src/esmodule-helpers.js');
+          (a.defineInteropFlag(r),
+            a.export(r, 'BaseStorage', () => o),
+            a.export(r, 'Storage', () => l));
+          var i = e('pify'),
+            n = a.interopDefault(i),
+            s = () => {
+              try {
+                let e =
+                  globalThis.navigator?.userAgent.match(
+                    /(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i,
+                  ) || [];
+                if ('Chrome' === e[1])
+                  return (
+                    100 > parseInt(e[2]) ||
+                    globalThis.chrome.runtime?.getManifest()
+                      ?.manifest_version === 2
+                  );
+              } catch {}
+              return !1;
+            },
+            o = class {
+              #e;
+              #t;
+              get primaryClient() {
+                return this.#t;
+              }
+              #r;
+              get secondaryClient() {
+                return this.#r;
+              }
+              #a;
+              get area() {
+                return this.#a;
+              }
+              get hasWebApi() {
+                try {
+                  return 'u' > typeof window && !!window.localStorage;
+                } catch (e) {
+                  return (console.error(e), !1);
+                }
+              }
+              #i = new Map();
+              #n;
+              get copiedKeySet() {
+                return this.#n;
+              }
+              isCopied = (e) =>
+                this.hasWebApi && (this.allCopied || this.copiedKeySet.has(e));
+              #s = !1;
+              get allCopied() {
+                return this.#s;
+              }
+              getExtStorageApi = () =>
+                globalThis.browser?.storage || globalThis.chrome?.storage;
+              get hasExtensionApi() {
+                try {
+                  return !!this.getExtStorageApi();
+                } catch (e) {
+                  return (console.error(e), !1);
+                }
+              }
+              isWatchSupported = () => this.hasExtensionApi;
+              keyNamespace = '';
+              isValidKey = (e) => e.startsWith(this.keyNamespace);
+              getNamespacedKey = (e) => `${this.keyNamespace}${e}`;
+              getUnnamespacedKey = (e) => e.slice(this.keyNamespace.length);
+              serde = { serializer: JSON.stringify, deserializer: JSON.parse };
+              constructor({
+                area: e = 'sync',
+                allCopied: t = !1,
+                copiedKeyList: r = [],
+                serde: a = {},
+              } = {}) {
+                (this.setCopiedKeySet(r),
+                  (this.#a = e),
+                  (this.#s = t),
+                  (this.serde = { ...this.serde, ...a }));
+                try {
+                  this.hasWebApi &&
+                    (t || r.length > 0) &&
+                    (this.#r = window.localStorage);
+                } catch {}
+                try {
+                  this.hasExtensionApi &&
+                    ((this.#e = this.getExtStorageApi()),
+                    s()
+                      ? (this.#t = (0, n.default)(this.#e[this.area], {
+                          exclude: ['getBytesInUse'],
+                          errorFirst: !1,
+                        }))
+                      : (this.#t = this.#e[this.area]));
+                } catch {}
+              }
+              setCopiedKeySet(e) {
+                this.#n = new Set(e);
+              }
+              rawGetAll = () => this.#t?.get();
+              getAll = async () =>
+                Object.entries(await this.rawGetAll())
+                  .filter(([e]) => this.isValidKey(e))
+                  .reduce(
+                    (e, [t, r]) => ((e[this.getUnnamespacedKey(t)] = r), e),
+                    {},
+                  );
+              copy = async (e) => {
+                let t = void 0 === e;
+                if (
+                  (!t && !this.copiedKeySet.has(e)) ||
+                  !this.allCopied ||
+                  !this.hasExtensionApi
+                )
+                  return !1;
+                let r = this.allCopied
+                  ? await this.rawGetAll()
+                  : await this.#t.get(
+                      (t ? [...this.copiedKeySet] : [e]).map(
+                        this.getNamespacedKey,
+                      ),
+                    );
+                if (!r) return !1;
+                let a = !1;
+                for (let e in r) {
+                  let t = r[e],
+                    i = this.#r?.getItem(e);
+                  (this.#r?.setItem(e, t), (a ||= t !== i));
+                }
+                return a;
+              };
+              rawGet = async (e) => (await this.rawGetMany([e]))[e];
+              rawGetMany = async (e) =>
+                this.hasExtensionApi
+                  ? await this.#t.get(e)
+                  : e
+                      .filter(this.isCopied)
+                      .reduce((e, t) => ((e[t] = this.#r?.getItem(t)), e), {});
+              rawSet = async (e, t) => await this.rawSetMany({ [e]: t });
+              rawSetMany = async (e) => (
+                this.#r &&
+                  Object.entries(e)
+                    .filter(([e]) => this.isCopied(e))
+                    .forEach(([e, t]) => this.#r.setItem(e, t)),
+                this.hasExtensionApi && (await this.#t.set(e)),
+                null
+              );
+              clear = async (e = !1) => {
+                (e && this.#r?.clear(), await this.#t.clear());
+              };
+              rawRemove = async (e) => {
+                await this.rawRemoveMany([e]);
+              };
+              rawRemoveMany = async (e) => {
+                (this.#r &&
+                  e.filter(this.isCopied).forEach((e) => this.#r.removeItem(e)),
+                  this.hasExtensionApi && (await this.#t.remove(e)));
+              };
+              removeAll = async () => {
+                let e = Object.keys(await this.getAll());
+                await this.removeMany(e);
+              };
+              watch = (e) => {
+                let t = this.isWatchSupported();
+                return (t && this.#o(e), t);
+              };
+              #o = (e) => {
+                for (let t in e) {
+                  let r = this.getNamespacedKey(t),
+                    a = this.#i.get(r)?.callbackSet || new Set();
+                  if ((a.add(e[t]), a.size > 1)) continue;
+                  let i = (e, t) => {
+                    if (t !== this.area || !e[r]) return;
+                    let a = this.#i.get(r);
+                    if (!a)
+                      throw Error(
+                        `Storage comms does not exist for nsKey: ${r}`,
+                      );
+                    Promise.all([
+                      this.parseValue(e[r].newValue),
+                      this.parseValue(e[r].oldValue),
+                    ]).then(([e, r]) => {
+                      for (let i of a.callbackSet)
+                        i({ newValue: e, oldValue: r }, t);
+                    });
+                  };
+                  (this.#e.onChanged.addListener(i),
+                    this.#i.set(r, { callbackSet: a, listener: i }));
+                }
+              };
+              unwatch = (e) => {
+                let t = this.isWatchSupported();
+                return (t && this.#l(e), t);
+              };
+              #l(e) {
+                for (let t in e) {
+                  let r = this.getNamespacedKey(t),
+                    a = e[t],
+                    i = this.#i.get(r);
+                  i &&
+                    (i.callbackSet.delete(a),
+                    0 === i.callbackSet.size &&
+                      (this.#i.delete(r),
+                      this.#e.onChanged.removeListener(i.listener)));
+                }
+              }
+              unwatchAll = () => this.#u();
+              #u() {
+                (this.#i.forEach(({ listener: e }) =>
+                  this.#e.onChanged.removeListener(e),
+                ),
+                  this.#i.clear());
+              }
+              async getItem(e) {
+                return this.get(e);
+              }
+              async getItems(e) {
+                return await this.getMany(e);
+              }
+              async setItem(e, t) {
+                await this.set(e, t);
+              }
+              async setItems(e) {
+                await await this.setMany(e);
+              }
+              async removeItem(e) {
+                return this.remove(e);
+              }
+              async removeItems(e) {
+                return await this.removeMany(e);
+              }
+            },
+            l = class extends o {
+              get = async (e) => {
+                let t = this.getNamespacedKey(e),
+                  r = await this.rawGet(t);
+                return this.parseValue(r);
+              };
+              getMany = async (e) => {
+                let t = e.map(this.getNamespacedKey),
+                  r = await this.rawGetMany(t),
+                  a = await Promise.all(Object.values(r).map(this.parseValue));
+                return Object.keys(r).reduce(
+                  (e, t, r) => ((e[this.getUnnamespacedKey(t)] = a[r]), e),
+                  {},
+                );
+              };
+              set = async (e, t) => {
+                let r = this.getNamespacedKey(e),
+                  a = this.serde.serializer(t);
+                return this.rawSet(r, a);
+              };
+              setMany = async (e) => {
+                let t = Object.entries(e).reduce(
+                  (e, [t, r]) => (
+                    (e[this.getNamespacedKey(t)] = this.serde.serializer(r)),
+                    e
+                  ),
+                  {},
+                );
+                return await this.rawSetMany(t);
+              };
+              remove = async (e) => {
+                let t = this.getNamespacedKey(e);
+                return this.rawRemove(t);
+              };
+              removeMany = async (e) => {
+                let t = e.map(this.getNamespacedKey);
+                return await this.rawRemoveMany(t);
+              };
+              setNamespace = (e) => {
+                this.keyNamespace = e;
+              };
+              parseValue = async (e) => {
+                try {
+                  if (void 0 !== e) return this.serde.deserializer(e);
+                } catch (e) {
+                  console.error(e);
+                }
+              };
+            };
+        },
+        {
+          'pify': 'fS8wt',
+          '@parcel/transformer-js/src/esmodule-helpers.js': 'fRZO2',
+        },
+      ],
+      'fS8wt': [
+        function (e, t, r) {
+          var a = e('@parcel/transformer-js/src/esmodule-helpers.js');
+          (a.defineInteropFlag(r), a.export(r, 'default', () => s));
+          let i = (e, t, r, a) =>
+              function (...i) {
+                let n = t.promiseModule;
+                return new n((n, s) => {
+                  (t.multiArgs
+                    ? i.push((...e) => {
+                        t.errorFirst ? (e[0] ? s(e) : (e.shift(), n(e))) : n(e);
+                      })
+                    : t.errorFirst
+                      ? i.push((e, t) => {
+                          e ? s(e) : n(t);
+                        })
+                      : i.push(n),
+                    Reflect.apply(e, this === r ? a : this, i));
+                });
+              },
+            n = new WeakMap();
+          function s(e, t) {
+            t = {
+              exclude: [/.+(?:Sync|Stream)$/],
+              errorFirst: !0,
+              promiseModule: Promise,
+              ...t,
+            };
+            let r = typeof e;
+            if (!(null !== e && ('object' === r || 'function' === r)))
+              throw TypeError(
+                `Expected \`input\` to be a \`Function\` or \`Object\`, got \`${null === e ? 'null' : r}\``,
+              );
+            let a = (e, r) => {
+                let a = n.get(e);
+                if ((a || ((a = {}), n.set(e, a)), r in a)) return a[r];
+                let i = (e) =>
+                    'string' == typeof e || 'symbol' == typeof r
+                      ? r === e
+                      : e.test(r),
+                  s = Reflect.getOwnPropertyDescriptor(e, r),
+                  o = void 0 === s || s.writable || s.configurable,
+                  l = t.include
+                    ? t.include.some((e) => i(e))
+                    : !t.exclude.some((e) => i(e)),
+                  u = l && o;
+                return ((a[r] = u), u);
+              },
+              s = new WeakMap(),
+              o = new Proxy(e, {
+                apply(e, r, a) {
+                  let n = s.get(e);
+                  if (n) return Reflect.apply(n, r, a);
+                  let l = t.excludeMain ? e : i(e, t, o, e);
+                  return (s.set(e, l), Reflect.apply(l, r, a));
+                },
+                get(e, r) {
+                  let n = e[r];
+                  if (!a(e, r) || n === Function.prototype[r]) return n;
+                  let l = s.get(n);
+                  if (l) return l;
+                  if ('function' == typeof n) {
+                    let r = i(n, t, o, e);
+                    return (s.set(n, r), r);
+                  }
+                  return n;
+                },
+              });
+            return o;
+          }
         },
         { '@parcel/transformer-js/src/esmodule-helpers.js': 'fRZO2' },
       ],
@@ -618,8 +1316,8 @@ var e, t;
             a.export(r, 'pauseKawarp', () => F),
             a.export(r, 'resumeKawarp', () => C));
           var i = e('@kawarp/core'),
-            s = a.interopDefault(i),
-            n = e('../../shared/utils/logger');
+            n = a.interopDefault(i),
+            s = e('@/shared/utils/logger');
           let o = () => ({
               backdrop: null,
               container: null,
@@ -714,7 +1412,7 @@ var e, t;
                   : document.querySelector(
                       '.background-gradient.style-scope.ytmusic-browse-response',
                     ),
-            x = async (e, t = 5e3) => {
+            y = async (e, t = 5e3) => {
               let r = A(e),
                 a = r && r.children.length > 0;
               if (a) {
@@ -733,13 +1431,13 @@ var e, t;
                       setTimeout(() => r(!0), t);
                     }
                   }),
-                  s = document.querySelector('ytmusic-app');
-                s
-                  ? i.observe(s, { childList: !0, subtree: !0 })
+                  n = document.querySelector('ytmusic-app');
+                n
+                  ? i.observe(n, { childList: !0, subtree: !0 })
                   : (clearTimeout(a), r(!1));
               });
             },
-            y = () => {
+            x = () => {
               let e = new URL(window.location.href);
               return e.searchParams.get('v');
             },
@@ -747,7 +1445,7 @@ var e, t;
               let e = document.querySelector('#song-image img');
               if (e?.src && !e.src.startsWith('data:') && e.naturalHeight > 0)
                 return e.src;
-              let t = y();
+              let t = x();
               if (t) return `https://i.ytimg.com/vi/${t}/maxresdefault.jpg`;
               let r = document.querySelector(
                 'ytmusic-player-bar .thumbnail img, .middle-controls .thumbnail img',
@@ -760,23 +1458,23 @@ var e, t;
               let a = f(r);
               if (c.has(a))
                 return (
-                  (0, n.logger).log(
+                  (0, s.logger).log(
                     `Kawarp creation already in progress for ${a}, skipping`,
                   ),
                   !1
                 );
               let i = p(a);
               (i.instance &&
-                ((0, n.logger).log(
+                ((0, s.logger).log(
                   `Kawarp already exists for ${a}, destroying first`,
                 ),
                 v(a)),
                 c.add(a));
-              let o = await x(r);
+              let o = await y(r);
               if (!o) return (c.delete(a), !1);
               let u = A(r);
               if (
-                ((0, n.logger).log(
+                ((0, s.logger).log(
                   'createKawarp - targetSelector:',
                   r,
                   'targetElement found:',
@@ -785,7 +1483,7 @@ var e, t;
                 !u)
               )
                 return (
-                  (0, n.logger).error(
+                  (0, s.logger).error(
                     'Target element not found for selector:',
                     r,
                   ),
@@ -816,10 +1514,10 @@ var e, t;
                   : `
       --sidebar: 240px;
       position: absolute;
-      top: -122px;
+      top: -64px;
       left: calc(-1 * var(--sidebar));
       width: calc(100% + var(--sidebar));
-      height: calc(100% + 205px);
+      height: calc(100% + 128px);
       pointer-events: none;
       z-index: -2;
       background-color: #000;
@@ -843,10 +1541,10 @@ var e, t;
                   : `
       --sidebar: 240px;
       position: absolute;
-      top: -122px;
+      top: -64px;
       left: calc(-1 * var(--sidebar));
       width: calc(100% + var(--sidebar));
-      height: calc(100% + 205px);
+      height: calc(100% + 128px);
       pointer-events: none;
       z-index: -1;
       opacity: 0;
@@ -863,7 +1561,7 @@ var e, t;
                 u.insertBefore(i.backdrop, u.firstChild),
                 u.insertBefore(i.container, i.backdrop.nextSibling));
               let h = e.kawarpAnimationSpeed * t.speedMultiplier;
-              ((i.instance = new s.default(i.canvas, {
+              ((i.instance = new n.default(i.canvas, {
                 warpIntensity: e.kawarpWarpIntensity,
                 blurPasses: e.kawarpBlurPasses,
                 animationSpeed: h,
@@ -876,15 +1574,15 @@ var e, t;
                 (i.targetSpeed = h),
                 (i.lastSettings = { ...e }),
                 (i.lastMultipliers = { ...t }));
-              let y = b();
-              if (y)
+              let x = b();
+              if (x)
                 try {
-                  (await l(i.instance, y),
-                    (i.currentImageUrl = y),
-                    (d = y),
-                    (0, n.logger).log('Kawarp loaded album art:', y));
+                  (await l(i.instance, x),
+                    (i.currentImageUrl = x),
+                    (d = x),
+                    (0, s.logger).log('Kawarp loaded album art:', x));
                 } catch (e) {
-                  (0, n.logger).error(
+                  (0, s.logger).error(
                     'Failed to load album art for kawarp:',
                     e,
                   );
@@ -918,7 +1616,7 @@ var e, t;
             v = (e) => {
               if (e) {
                 let t = p(e);
-                ((0, n.logger).log(`Destroying kawarp for location: ${e}`),
+                ((0, s.logger).log(`Destroying kawarp for location: ${e}`),
                   null !== t.transitionTimeoutId &&
                     (clearTimeout(t.transitionTimeoutId),
                     (t.transitionTimeoutId = null)),
@@ -949,7 +1647,7 @@ var e, t;
                   (t.isPaused = !1),
                   m.delete(e));
               } else
-                for (let e of ((0, n.logger).log('Destroying all kawarps'),
+                for (let e of ((0, s.logger).log('Destroying all kawarps'),
                 m.keys()))
                   v(e);
             },
@@ -963,9 +1661,9 @@ var e, t;
                 (await l(e.instance, t),
                   (e.currentImageUrl = t),
                   (d = t),
-                  (0, n.logger).log(`Updated kawarp image for ${r}:`, t));
+                  (0, s.logger).log(`Updated kawarp image for ${r}:`, t));
               } catch (t) {
-                ((0, n.logger).error('Failed to update kawarp image:', t),
+                ((0, s.logger).error('Failed to update kawarp image:', t),
                   (e.isTransitioning = !1));
                 return;
               }
@@ -977,7 +1675,7 @@ var e, t;
                 ) {
                   let t = e.pendingImageUrl;
                   ((e.pendingImageUrl = null),
-                    (0, n.logger).log(`Processing queued image for ${r}:`, t),
+                    (0, s.logger).log(`Processing queued image for ${r}:`, t),
                     T(e, t, r));
                 }
               }, a);
@@ -988,7 +1686,7 @@ var e, t;
               let r = b();
               if (r && r !== t.currentImageUrl) {
                 if (t.isTransitioning) {
-                  ((0, n.logger).log(
+                  ((0, s.logger).log(
                     `Transition in progress for ${e}, queueing image:`,
                     r,
                   ),
@@ -1004,13 +1702,13 @@ var e, t;
                 if (!a.instance || !a.container) return;
                 let i =
                     a.lastMultipliers?.speedMultiplier !== t.speedMultiplier,
-                  s = a.lastMultipliers?.scaleMultiplier !== t.scaleMultiplier;
-                if (i || s) {
+                  n = a.lastMultipliers?.scaleMultiplier !== t.scaleMultiplier;
+                if (i || n) {
                   if (i) {
                     let r = e.kawarpAnimationSpeed * t.speedMultiplier;
                     a.instance.animationSpeed = r;
                   }
-                  (s &&
+                  (n &&
                     ((a.targetScale = t.scaleMultiplier),
                     null === a.scaleAnimationId &&
                       (a.scaleAnimationId = requestAnimationFrame(() => u(a)))),
@@ -1025,7 +1723,7 @@ var e, t;
                 let a = p(r);
                 if (!a.instance || !a.container) return;
                 if (!document.contains(a.container)) {
-                  ((0, n.logger).log(
+                  ((0, s.logger).log(
                     `Container for ${r} was removed from DOM, cleaning up state`,
                   ),
                     v(r));
@@ -1042,10 +1740,10 @@ var e, t;
                 }),
                   (a.lastSettings = { ...e }),
                   (a.lastMultipliers = { ...t }));
-                let s = e.kawarpOpacity.toString();
+                let n = e.kawarpOpacity.toString();
                 a.container &&
-                  a.container.style.opacity !== s &&
-                  (a.container.style.opacity = s);
+                  a.container.style.opacity !== n &&
+                  (a.container.style.opacity = n);
               };
               if (r) a(r);
               else for (let e of m.keys()) a(e);
@@ -1073,7 +1771,7 @@ var e, t;
             P = () => {
               let e = document.querySelectorAll("[id^='better-lyrics-kawarp']");
               (e.forEach((e) => e.remove()),
-                (0, n.logger).log('Cleaned up orphaned kawarps:', e.length));
+                (0, s.logger).log('Cleaned up orphaned kawarps:', e.length));
             },
             F = (e) => {
               let t = (e) => {
@@ -1105,7 +1803,7 @@ var e, t;
         },
         {
           '@kawarp/core': '7nLkY',
-          '../../shared/utils/logger': '4b2II',
+          '@/shared/utils/logger': '4b2II',
           '@parcel/transformer-js/src/esmodule-helpers.js': 'fRZO2',
         },
       ],
@@ -1122,7 +1820,7 @@ var e, t;
     v_texCoord = a_texCoord;
   }
 `,
-            s = `
+            n = `
   precision highp float;
   uniform sampler2D u_texture;
   uniform vec2 u_resolution;
@@ -1141,7 +1839,7 @@ var e, t;
     gl_FragColor = color * 0.25;
   }
 `,
-            n = `
+            s = `
   precision highp float;
   uniform sampler2D u_texture1;
   uniform sampler2D u_texture2;
@@ -1327,8 +2025,8 @@ var e, t;
                 (this._tintIntensity = t.tintIntensity ?? 0.15),
                 (this._dithering = t.dithering ?? 0.008),
                 (this._scale = t.scale ?? 1),
-                (this.blurProgram = this.createProgram(i, s)),
-                (this.blendProgram = this.createProgram(i, n)),
+                (this.blurProgram = this.createProgram(i, n)),
+                (this.blendProgram = this.createProgram(i, s)),
                 (this.tintProgram = this.createProgram(i, o)),
                 (this.warpProgram = this.createProgram(i, l)),
                 (this.outputProgram = this.createProgram(i, u)),
@@ -1583,16 +2281,16 @@ var e, t;
               let a = r.getContext('2d');
               if (!a) return;
               let i = (t * Math.PI) / 180,
-                s = a.createLinearGradient(
+                n = a.createLinearGradient(
                   256 - 512 * Math.cos(i),
                   256 - 512 * Math.sin(i),
                   256 + 512 * Math.cos(i),
                   256 + 512 * Math.sin(i),
                 );
               (e.forEach((t, r) => {
-                s.addColorStop(r / (e.length - 1), t);
+                n.addColorStop(r / (e.length - 1), t);
               }),
-                (a.fillStyle = s),
+                (a.fillStyle = n),
                 a.fillRect(0, 0, 512, 512),
                 this.loadImageElement(r));
             }
@@ -1704,14 +2402,14 @@ var e, t;
               let r;
               let a = this.gl,
                 i = this.canvas.width,
-                s = this.canvas.height,
-                n = 1;
+                n = this.canvas.height,
+                s = 1;
               if (this.isTransitioning) {
                 let e = t - this.transitionStartTime;
-                (n = Math.min(1, e / this._transitionDuration)) >= 1 &&
+                (s = Math.min(1, e / this._transitionDuration)) >= 1 &&
                   (this.isTransitioning = !1);
               }
-              (this.isTransitioning && n < 1
+              (this.isTransitioning && s < 1
                 ? (a.useProgram(this.blendProgram),
                   this.setupAttributes(),
                   a.bindFramebuffer(a.FRAMEBUFFER, this.blurFBO1.framebuffer),
@@ -1722,19 +2420,19 @@ var e, t;
                   a.activeTexture(a.TEXTURE1),
                   a.bindTexture(a.TEXTURE_2D, this.nextAlbumFBO.texture),
                   a.uniform1i(this.uniforms.blend.texture2, 1),
-                  a.uniform1f(this.uniforms.blend.blend, n),
+                  a.uniform1f(this.uniforms.blend.blend, s),
                   a.drawArrays(a.TRIANGLES, 0, 6),
                   (r = this.blurFBO1.texture),
                   a.useProgram(this.warpProgram),
                   this.setupAttributes(),
                   a.bindFramebuffer(a.FRAMEBUFFER, this.warpFBO.framebuffer),
-                  a.viewport(0, 0, i, s),
+                  a.viewport(0, 0, i, n),
                   a.activeTexture(a.TEXTURE0),
                   a.bindTexture(a.TEXTURE_2D, r))
                 : (a.useProgram(this.warpProgram),
                   this.setupAttributes(),
                   a.bindFramebuffer(a.FRAMEBUFFER, this.warpFBO.framebuffer),
-                  a.viewport(0, 0, i, s),
+                  a.viewport(0, 0, i, n),
                   a.activeTexture(a.TEXTURE0),
                   a.bindTexture(a.TEXTURE_2D, this.nextAlbumFBO.texture)),
                 a.uniform1i(this.uniforms.warp.texture, 0),
@@ -1744,14 +2442,14 @@ var e, t;
                 a.useProgram(this.outputProgram),
                 this.setupAttributes(),
                 a.bindFramebuffer(a.FRAMEBUFFER, null),
-                a.viewport(0, 0, i, s),
+                a.viewport(0, 0, i, n),
                 a.bindTexture(a.TEXTURE_2D, this.warpFBO.texture),
                 a.uniform1i(this.uniforms.output.texture, 0),
                 a.uniform1f(this.uniforms.output.saturation, this._saturation),
                 a.uniform1f(this.uniforms.output.dithering, this._dithering),
                 a.uniform1f(this.uniforms.output.time, e),
                 a.uniform1f(this.uniforms.output.scale, this._scale),
-                a.uniform2f(this.uniforms.output.resolution, i, s),
+                a.uniform2f(this.uniforms.output.resolution, i, n),
                 a.drawArrays(a.TRIANGLES, 0, 6));
             }
             setupAttributes() {
@@ -1795,18 +2493,18 @@ var e, t;
               let r = this.gl,
                 a = this.createShader(r.VERTEX_SHADER, e),
                 i = this.createShader(r.FRAGMENT_SHADER, t),
-                s = r.createProgram();
-              if (!s) throw Error('Failed to create program');
+                n = r.createProgram();
+              if (!n) throw Error('Failed to create program');
               if (
-                (r.attachShader(s, a),
-                r.attachShader(s, i),
-                r.linkProgram(s),
-                !r.getProgramParameter(s, r.LINK_STATUS))
+                (r.attachShader(n, a),
+                r.attachShader(n, i),
+                r.linkProgram(n),
+                !r.getProgramParameter(n, r.LINK_STATUS))
               ) {
-                let e = r.getProgramInfoLog(s);
-                throw (r.deleteProgram(s), Error(`Program link error: ${e}`));
+                let e = r.getProgramInfoLog(n);
+                throw (r.deleteProgram(n), Error(`Program link error: ${e}`));
               }
-              return (r.deleteShader(a), r.deleteShader(i), s);
+              return (r.deleteShader(a), r.deleteShader(i), n);
             }
             createBuffer(e) {
               let t = this.gl,
@@ -1842,9 +2540,9 @@ var e, t;
             createFramebuffer(e, t, r = !1) {
               let a = this.gl,
                 i = this.createTexture(),
-                s = r && this.halfFloatExt && this.halfFloatLinearExt,
-                n = s ? this.halfFloatExt.HALF_FLOAT_OES : a.UNSIGNED_BYTE;
-              a.texImage2D(a.TEXTURE_2D, 0, a.RGBA, e, t, 0, a.RGBA, n, null);
+                n = r && this.halfFloatExt && this.halfFloatLinearExt,
+                s = n ? this.halfFloatExt.HALF_FLOAT_OES : a.UNSIGNED_BYTE;
+              a.texImage2D(a.TEXTURE_2D, 0, a.RGBA, e, t, 0, a.RGBA, s, null);
               let o = a.createFramebuffer();
               if (!o) throw Error('Failed to create framebuffer');
               return (
@@ -1875,19 +2573,19 @@ var e, t;
             a.export(r, 'loadGradientSettings', () => l),
             a.export(r, 'saveGradientSettings', () => u));
           var i = e('@plasmohq/storage'),
-            s = e('../../shared/constants/gradientSettings'),
-            n = e('../../shared/utils/logger');
+            n = e('@/shared/constants/gradientSettings'),
+            s = e('@/shared/utils/logger');
           let o = new i.Storage(),
             l = async () => {
               try {
-                let e = await o.get(s.GRADIENT_SETTINGS_STORAGE_KEY);
+                let e = await o.get(n.GRADIENT_SETTINGS_STORAGE_KEY);
                 if (e) {
                   let {
                       showOnHomepage: t,
                       shaderType: r,
                       distortion: a,
                       swirl: i,
-                      offsetX: n,
+                      offsetX: s,
                       offsetY: o,
                       scale: l,
                       rotation: u,
@@ -1899,34 +2597,34 @@ var e, t;
                       boostIntensity: h,
                       rememberAlbumSettings: f,
                       audioScaleBoost: A,
-                      ...x
+                      ...y
                     } = e,
-                    y = {
-                      ...s.DEFAULT_GRADIENT_SETTINGS,
-                      ...x,
+                    x = {
+                      ...n.DEFAULT_GRADIENT_SETTINGS,
+                      ...y,
                       showOnBrowsePages:
-                        x.showOnBrowsePages ??
+                        y.showOnBrowsePages ??
                         t ??
-                        s.DEFAULT_GRADIENT_SETTINGS.showOnBrowsePages,
+                        n.DEFAULT_GRADIENT_SETTINGS.showOnBrowsePages,
                     };
-                  return y;
+                  return x;
                 }
-                return { ...s.DEFAULT_GRADIENT_SETTINGS };
+                return { ...n.DEFAULT_GRADIENT_SETTINGS };
               } catch (e) {
                 return (
-                  (0, n.logger).error(
+                  (0, s.logger).error(
                     'Error loading gradient settings from storage:',
                     e,
                   ),
-                  { ...s.DEFAULT_GRADIENT_SETTINGS }
+                  { ...n.DEFAULT_GRADIENT_SETTINGS }
                 );
               }
             },
             u = async (e) => {
               try {
-                await o.set(s.GRADIENT_SETTINGS_STORAGE_KEY, e);
+                await o.set(n.GRADIENT_SETTINGS_STORAGE_KEY, e);
               } catch (e) {
-                (0, n.logger).error(
+                (0, s.logger).error(
                   'Error saving gradient settings to storage:',
                   e,
                 );
@@ -1935,381 +2633,21 @@ var e, t;
         },
         {
           '@plasmohq/storage': '25Hq9',
-          '../../shared/constants/gradientSettings': '2tB0U',
-          '../../shared/utils/logger': '4b2II',
+          '@/shared/constants/gradientSettings': '2tB0U',
+          '@/shared/utils/logger': '4b2II',
           '@parcel/transformer-js/src/esmodule-helpers.js': 'fRZO2',
         },
-      ],
-      '25Hq9': [
-        function (e, t, r) {
-          var a = e('@parcel/transformer-js/src/esmodule-helpers.js');
-          (a.defineInteropFlag(r),
-            a.export(r, 'BaseStorage', () => o),
-            a.export(r, 'Storage', () => l));
-          var i = e('pify'),
-            s = a.interopDefault(i),
-            n = () => {
-              try {
-                let e =
-                  globalThis.navigator?.userAgent.match(
-                    /(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i,
-                  ) || [];
-                if ('Chrome' === e[1])
-                  return (
-                    100 > parseInt(e[2]) ||
-                    globalThis.chrome.runtime?.getManifest()
-                      ?.manifest_version === 2
-                  );
-              } catch {}
-              return !1;
-            },
-            o = class {
-              #e;
-              #t;
-              get primaryClient() {
-                return this.#t;
-              }
-              #r;
-              get secondaryClient() {
-                return this.#r;
-              }
-              #a;
-              get area() {
-                return this.#a;
-              }
-              get hasWebApi() {
-                try {
-                  return 'u' > typeof window && !!window.localStorage;
-                } catch (e) {
-                  return (console.error(e), !1);
-                }
-              }
-              #i = new Map();
-              #s;
-              get copiedKeySet() {
-                return this.#s;
-              }
-              isCopied = (e) =>
-                this.hasWebApi && (this.allCopied || this.copiedKeySet.has(e));
-              #n = !1;
-              get allCopied() {
-                return this.#n;
-              }
-              getExtStorageApi = () =>
-                globalThis.browser?.storage || globalThis.chrome?.storage;
-              get hasExtensionApi() {
-                try {
-                  return !!this.getExtStorageApi();
-                } catch (e) {
-                  return (console.error(e), !1);
-                }
-              }
-              isWatchSupported = () => this.hasExtensionApi;
-              keyNamespace = '';
-              isValidKey = (e) => e.startsWith(this.keyNamespace);
-              getNamespacedKey = (e) => `${this.keyNamespace}${e}`;
-              getUnnamespacedKey = (e) => e.slice(this.keyNamespace.length);
-              serde = { serializer: JSON.stringify, deserializer: JSON.parse };
-              constructor({
-                area: e = 'sync',
-                allCopied: t = !1,
-                copiedKeyList: r = [],
-                serde: a = {},
-              } = {}) {
-                (this.setCopiedKeySet(r),
-                  (this.#a = e),
-                  (this.#n = t),
-                  (this.serde = { ...this.serde, ...a }));
-                try {
-                  this.hasWebApi &&
-                    (t || r.length > 0) &&
-                    (this.#r = window.localStorage);
-                } catch {}
-                try {
-                  this.hasExtensionApi &&
-                    ((this.#e = this.getExtStorageApi()),
-                    n()
-                      ? (this.#t = (0, s.default)(this.#e[this.area], {
-                          exclude: ['getBytesInUse'],
-                          errorFirst: !1,
-                        }))
-                      : (this.#t = this.#e[this.area]));
-                } catch {}
-              }
-              setCopiedKeySet(e) {
-                this.#s = new Set(e);
-              }
-              rawGetAll = () => this.#t?.get();
-              getAll = async () =>
-                Object.entries(await this.rawGetAll())
-                  .filter(([e]) => this.isValidKey(e))
-                  .reduce(
-                    (e, [t, r]) => ((e[this.getUnnamespacedKey(t)] = r), e),
-                    {},
-                  );
-              copy = async (e) => {
-                let t = void 0 === e;
-                if (
-                  (!t && !this.copiedKeySet.has(e)) ||
-                  !this.allCopied ||
-                  !this.hasExtensionApi
-                )
-                  return !1;
-                let r = this.allCopied
-                  ? await this.rawGetAll()
-                  : await this.#t.get(
-                      (t ? [...this.copiedKeySet] : [e]).map(
-                        this.getNamespacedKey,
-                      ),
-                    );
-                if (!r) return !1;
-                let a = !1;
-                for (let e in r) {
-                  let t = r[e],
-                    i = this.#r?.getItem(e);
-                  (this.#r?.setItem(e, t), (a ||= t !== i));
-                }
-                return a;
-              };
-              rawGet = async (e) => (await this.rawGetMany([e]))[e];
-              rawGetMany = async (e) =>
-                this.hasExtensionApi
-                  ? await this.#t.get(e)
-                  : e
-                      .filter(this.isCopied)
-                      .reduce((e, t) => ((e[t] = this.#r?.getItem(t)), e), {});
-              rawSet = async (e, t) => await this.rawSetMany({ [e]: t });
-              rawSetMany = async (e) => (
-                this.#r &&
-                  Object.entries(e)
-                    .filter(([e]) => this.isCopied(e))
-                    .forEach(([e, t]) => this.#r.setItem(e, t)),
-                this.hasExtensionApi && (await this.#t.set(e)),
-                null
-              );
-              clear = async (e = !1) => {
-                (e && this.#r?.clear(), await this.#t.clear());
-              };
-              rawRemove = async (e) => {
-                await this.rawRemoveMany([e]);
-              };
-              rawRemoveMany = async (e) => {
-                (this.#r &&
-                  e.filter(this.isCopied).forEach((e) => this.#r.removeItem(e)),
-                  this.hasExtensionApi && (await this.#t.remove(e)));
-              };
-              removeAll = async () => {
-                let e = Object.keys(await this.getAll());
-                await this.removeMany(e);
-              };
-              watch = (e) => {
-                let t = this.isWatchSupported();
-                return (t && this.#o(e), t);
-              };
-              #o = (e) => {
-                for (let t in e) {
-                  let r = this.getNamespacedKey(t),
-                    a = this.#i.get(r)?.callbackSet || new Set();
-                  if ((a.add(e[t]), a.size > 1)) continue;
-                  let i = (e, t) => {
-                    if (t !== this.area || !e[r]) return;
-                    let a = this.#i.get(r);
-                    if (!a)
-                      throw Error(
-                        `Storage comms does not exist for nsKey: ${r}`,
-                      );
-                    Promise.all([
-                      this.parseValue(e[r].newValue),
-                      this.parseValue(e[r].oldValue),
-                    ]).then(([e, r]) => {
-                      for (let i of a.callbackSet)
-                        i({ newValue: e, oldValue: r }, t);
-                    });
-                  };
-                  (this.#e.onChanged.addListener(i),
-                    this.#i.set(r, { callbackSet: a, listener: i }));
-                }
-              };
-              unwatch = (e) => {
-                let t = this.isWatchSupported();
-                return (t && this.#l(e), t);
-              };
-              #l(e) {
-                for (let t in e) {
-                  let r = this.getNamespacedKey(t),
-                    a = e[t],
-                    i = this.#i.get(r);
-                  i &&
-                    (i.callbackSet.delete(a),
-                    0 === i.callbackSet.size &&
-                      (this.#i.delete(r),
-                      this.#e.onChanged.removeListener(i.listener)));
-                }
-              }
-              unwatchAll = () => this.#u();
-              #u() {
-                (this.#i.forEach(({ listener: e }) =>
-                  this.#e.onChanged.removeListener(e),
-                ),
-                  this.#i.clear());
-              }
-              async getItem(e) {
-                return this.get(e);
-              }
-              async getItems(e) {
-                return await this.getMany(e);
-              }
-              async setItem(e, t) {
-                await this.set(e, t);
-              }
-              async setItems(e) {
-                await await this.setMany(e);
-              }
-              async removeItem(e) {
-                return this.remove(e);
-              }
-              async removeItems(e) {
-                return await this.removeMany(e);
-              }
-            },
-            l = class extends o {
-              get = async (e) => {
-                let t = this.getNamespacedKey(e),
-                  r = await this.rawGet(t);
-                return this.parseValue(r);
-              };
-              getMany = async (e) => {
-                let t = e.map(this.getNamespacedKey),
-                  r = await this.rawGetMany(t),
-                  a = await Promise.all(Object.values(r).map(this.parseValue));
-                return Object.keys(r).reduce(
-                  (e, t, r) => ((e[this.getUnnamespacedKey(t)] = a[r]), e),
-                  {},
-                );
-              };
-              set = async (e, t) => {
-                let r = this.getNamespacedKey(e),
-                  a = this.serde.serializer(t);
-                return this.rawSet(r, a);
-              };
-              setMany = async (e) => {
-                let t = Object.entries(e).reduce(
-                  (e, [t, r]) => (
-                    (e[this.getNamespacedKey(t)] = this.serde.serializer(r)),
-                    e
-                  ),
-                  {},
-                );
-                return await this.rawSetMany(t);
-              };
-              remove = async (e) => {
-                let t = this.getNamespacedKey(e);
-                return this.rawRemove(t);
-              };
-              removeMany = async (e) => {
-                let t = e.map(this.getNamespacedKey);
-                return await this.rawRemoveMany(t);
-              };
-              setNamespace = (e) => {
-                this.keyNamespace = e;
-              };
-              parseValue = async (e) => {
-                try {
-                  if (void 0 !== e) return this.serde.deserializer(e);
-                } catch (e) {
-                  console.error(e);
-                }
-              };
-            };
-        },
-        {
-          'pify': 'fS8wt',
-          '@parcel/transformer-js/src/esmodule-helpers.js': 'fRZO2',
-        },
-      ],
-      'fS8wt': [
-        function (e, t, r) {
-          var a = e('@parcel/transformer-js/src/esmodule-helpers.js');
-          (a.defineInteropFlag(r), a.export(r, 'default', () => n));
-          let i = (e, t, r, a) =>
-              function (...i) {
-                let s = t.promiseModule;
-                return new s((s, n) => {
-                  (t.multiArgs
-                    ? i.push((...e) => {
-                        t.errorFirst ? (e[0] ? n(e) : (e.shift(), s(e))) : s(e);
-                      })
-                    : t.errorFirst
-                      ? i.push((e, t) => {
-                          e ? n(e) : s(t);
-                        })
-                      : i.push(s),
-                    Reflect.apply(e, this === r ? a : this, i));
-                });
-              },
-            s = new WeakMap();
-          function n(e, t) {
-            t = {
-              exclude: [/.+(?:Sync|Stream)$/],
-              errorFirst: !0,
-              promiseModule: Promise,
-              ...t,
-            };
-            let r = typeof e;
-            if (!(null !== e && ('object' === r || 'function' === r)))
-              throw TypeError(
-                `Expected \`input\` to be a \`Function\` or \`Object\`, got \`${null === e ? 'null' : r}\``,
-              );
-            let a = (e, r) => {
-                let a = s.get(e);
-                if ((a || ((a = {}), s.set(e, a)), r in a)) return a[r];
-                let i = (e) =>
-                    'string' == typeof e || 'symbol' == typeof r
-                      ? r === e
-                      : e.test(r),
-                  n = Reflect.getOwnPropertyDescriptor(e, r),
-                  o = void 0 === n || n.writable || n.configurable,
-                  l = t.include
-                    ? t.include.some((e) => i(e))
-                    : !t.exclude.some((e) => i(e)),
-                  u = l && o;
-                return ((a[r] = u), u);
-              },
-              n = new WeakMap(),
-              o = new Proxy(e, {
-                apply(e, r, a) {
-                  let s = n.get(e);
-                  if (s) return Reflect.apply(s, r, a);
-                  let l = t.excludeMain ? e : i(e, t, o, e);
-                  return (n.set(e, l), Reflect.apply(l, r, a));
-                },
-                get(e, r) {
-                  let s = e[r];
-                  if (!a(e, r) || s === Function.prototype[r]) return s;
-                  let l = n.get(s);
-                  if (l) return l;
-                  if ('function' == typeof s) {
-                    let r = i(s, t, o, e);
-                    return (n.set(s, r), r);
-                  }
-                  return s;
-                },
-              });
-            return o;
-          }
-        },
-        { '@parcel/transformer-js/src/esmodule-helpers.js': 'fRZO2' },
       ],
       '2fzSB': [
         function (e, t, r) {
           var a = e('@parcel/transformer-js/src/esmodule-helpers.js');
           (a.defineInteropFlag(r),
-            a.export(r, 'setupMessageListener', () => n),
+            a.export(r, 'setupMessageListener', () => s),
             a.export(r, 'getSongInfo', () => o));
           var i = e('webextension-polyfill'),
-            s = a.interopDefault(i);
-          let n = (e) => {
-              (0, s.default).runtime.onMessage.addListener((t) =>
+            n = a.interopDefault(i);
+          let s = (e) => {
+              (0, n.default).runtime.onMessage.addListener((t) =>
                 'getCurrentData' === t.action
                   ? Promise.resolve(e.getCurrentData())
                   : 'updateGradientSettings' === t.action && t.settings
@@ -2651,21 +2989,21 @@ var e, t;
                               ? t.resolve(a[0])
                               : t.resolve(a);
                         },
-                      s = (e) => (1 == e ? 'argument' : 'arguments'),
-                      n = (e, t) =>
+                      n = (e) => (1 == e ? 'argument' : 'arguments'),
+                      s = (e, t) =>
                         function (r, ...a) {
                           if (a.length < t.minArgs)
                             throw Error(
-                              `Expected at least ${t.minArgs} ${s(t.minArgs)} for ${e}(), got ${a.length}`,
+                              `Expected at least ${t.minArgs} ${n(t.minArgs)} for ${e}(), got ${a.length}`,
                             );
                           if (a.length > t.maxArgs)
                             throw Error(
-                              `Expected at most ${t.maxArgs} ${s(t.maxArgs)} for ${e}(), got ${a.length}`,
+                              `Expected at most ${t.maxArgs} ${n(t.maxArgs)} for ${e}(), got ${a.length}`,
                             );
-                          return new Promise((s, n) => {
+                          return new Promise((n, s) => {
                             if (t.fallbackToNoCallback)
                               try {
-                                r[e](...a, i({ resolve: s, reject: n }, t));
+                                r[e](...a, i({ resolve: n, reject: s }, t));
                               } catch (i) {
                                 (console.warn(
                                   `${e} API method doesn't seem to support the callback parameter, falling back to call it without a callback: `,
@@ -2674,12 +3012,12 @@ var e, t;
                                   r[e](...a),
                                   (t.fallbackToNoCallback = !1),
                                   (t.noCallback = !0),
-                                  s());
+                                  n());
                               }
                             else
                               t.noCallback
-                                ? (r[e](...a), s())
-                                : r[e](...a, i({ resolve: s, reject: n }, t));
+                                ? (r[e](...a), n())
+                                : r[e](...a, i({ resolve: n, reject: s }, t));
                           });
                         },
                       o = (e, t, r) =>
@@ -2692,41 +3030,41 @@ var e, t;
                           i = Object.create(e);
                         return new Proxy(i, {
                           has: (t, r) => r in e || r in a,
-                          get(i, s, g) {
-                            if (s in a) return a[s];
-                            if (!(s in e)) return;
-                            let m = e[s];
+                          get(i, n, g) {
+                            if (n in a) return a[n];
+                            if (!(n in e)) return;
+                            let m = e[n];
                             if ('function' == typeof m) {
-                              if ('function' == typeof t[s])
-                                m = o(e, e[s], t[s]);
-                              else if (l(r, s)) {
-                                let t = n(s, r[s]);
-                                m = o(e, e[s], t);
+                              if ('function' == typeof t[n])
+                                m = o(e, e[n], t[n]);
+                              else if (l(r, n)) {
+                                let t = s(n, r[n]);
+                                m = o(e, e[n], t);
                               } else m = m.bind(e);
                             } else if (
                               'object' == typeof m &&
                               null !== m &&
-                              (l(t, s) || l(r, s))
+                              (l(t, n) || l(r, n))
                             )
-                              m = u(m, t[s], r[s]);
+                              m = u(m, t[n], r[n]);
                             else {
                               if (!l(r, '*'))
                                 return (
-                                  Object.defineProperty(a, s, {
+                                  Object.defineProperty(a, n, {
                                     configurable: !0,
                                     enumerable: !0,
-                                    get: () => e[s],
+                                    get: () => e[n],
                                     set(t) {
-                                      e[s] = t;
+                                      e[n] = t;
                                     },
                                   }),
                                   m
                                 );
-                              m = u(m, t[s], r['*']);
+                              m = u(m, t[n], r['*']);
                             }
-                            return ((a[s] = m), m);
+                            return ((a[n] = m), m);
                           },
-                          set: (t, r, i, s) => (
+                          set: (t, r, i, n) => (
                             r in a ? (a[r] = i) : (e[r] = i),
                             !0
                           ),
@@ -2761,22 +3099,22 @@ var e, t;
                         'function' != typeof e
                           ? e
                           : function (t, r, i) {
-                              let s,
-                                n,
+                              let n,
+                                s,
                                 o = !1,
                                 l = new Promise((e) => {
-                                  s = function (t) {
+                                  n = function (t) {
                                     ((o = !0), e(t));
                                   };
                                 });
                               try {
-                                n = e(t, r, s);
+                                s = e(t, r, n);
                               } catch (e) {
-                                n = Promise.reject(e);
+                                s = Promise.reject(e);
                               }
-                              let u = !0 !== n && a(n);
+                              let u = !0 !== s && a(s);
                               return (
-                                (!0 === n || !!u || !!o) &&
+                                (!0 === s || !!u || !!o) &&
                                 (((e) => {
                                   e.then(
                                     (e) => {
@@ -2799,7 +3137,7 @@ var e, t;
                                       e,
                                     );
                                   });
-                                })(u ? n : l),
+                                })(u ? s : l),
                                 !0)
                               );
                             },
@@ -2817,11 +3155,11 @@ var e, t;
                       p = (e, t, r, ...a) => {
                         if (a.length < t.minArgs)
                           throw Error(
-                            `Expected at least ${t.minArgs} ${s(t.minArgs)} for ${e}(), got ${a.length}`,
+                            `Expected at least ${t.minArgs} ${n(t.minArgs)} for ${e}(), got ${a.length}`,
                           );
                         if (a.length > t.maxArgs)
                           throw Error(
-                            `Expected at most ${t.maxArgs} ${s(t.maxArgs)} for ${e}(), got ${a.length}`,
+                            `Expected at most ${t.maxArgs} ${n(t.maxArgs)} for ${e}(), got ${a.length}`,
                           );
                         return new Promise((e, t) => {
                           let i = d.bind(null, { resolve: e, reject: t });
@@ -2870,11 +3208,11 @@ var e, t;
         function (e, t, r) {
           var a = e('@parcel/transformer-js/src/esmodule-helpers.js');
           (a.defineInteropFlag(r),
-            a.export(r, 'initialize', () => x),
+            a.export(r, 'initialize', () => y),
             a.export(r, 'cleanup', () => E));
-          var i = e('../../shared/utils/logger'),
-            s = e('./audioAnalysis');
-          let n = null,
+          var i = e('@/shared/utils/logger'),
+            n = e('./audioAnalysis');
+          let s = null,
             o = null,
             l = null,
             u = null,
@@ -2886,7 +3224,7 @@ var e, t;
             h = null,
             f = 'visible',
             A = 0,
-            x = (e, t) => {
+            y = (e, t) => {
               let r;
               let a = !1;
               ((d = () => {
@@ -2900,13 +3238,13 @@ var e, t;
                   }, 300)));
               }),
                 (p = t ?? null),
-                y(),
+                x(),
                 b(),
                 w(),
                 v(),
                 T());
             },
-            y = () => {
+            x = () => {
               if (!d) return;
               l = new MutationObserver((e) => {
                 for (let t of e)
@@ -2951,13 +3289,13 @@ var e, t;
             },
             b = () => {
               let e = new URL(window.location.href).searchParams.get('v');
-              ((n = () => {
+              ((s = () => {
                 let t = new URL(window.location.href).searchParams.get('v');
                 t &&
                   t !== e &&
                   ((0, i.logger).log('Video ID changed:', e, '->', t),
                   (e = t),
-                  (0, s.checkAndReconnectElement)(),
+                  (0, n.checkAndReconnectElement)(),
                   p?.(),
                   d?.(),
                   c && clearTimeout(c),
@@ -2969,8 +3307,8 @@ var e, t;
                       (c = null));
                   }, 1500)));
               }),
-                document.addEventListener('yt-navigate-finish', n),
-                window.addEventListener('popstate', n));
+                document.addEventListener('yt-navigate-finish', s),
+                window.addEventListener('popstate', s));
             },
             w = () => {
               let e = '';
@@ -2983,7 +3321,7 @@ var e, t;
                   (0, i.logger).log(
                     'Video source changed - re-extracting colors',
                   ),
-                  (0, s.checkAndReconnectElement)(),
+                  (0, n.checkAndReconnectElement)(),
                   p?.(),
                   setTimeout(() => {
                     d?.();
@@ -3050,10 +3388,10 @@ var e, t;
             E = () => {
               if (
                 (h && (clearInterval(h), (h = null), (f = 'visible'), (A = 0)),
-                n &&
-                  (document.removeEventListener('yt-navigate-finish', n),
-                  window.removeEventListener('popstate', n),
-                  (n = null)),
+                s &&
+                  (document.removeEventListener('yt-navigate-finish', s),
+                  window.removeEventListener('popstate', s),
+                  (s = null)),
                 o)
               ) {
                 let e = document.querySelector('video');
@@ -3072,7 +3410,7 @@ var e, t;
             };
         },
         {
-          '../../shared/utils/logger': '4b2II',
+          '@/shared/utils/logger': '4b2II',
           './audioAnalysis': '5x9EN',
           '@parcel/transformer-js/src/esmodule-helpers.js': 'fRZO2',
         },
