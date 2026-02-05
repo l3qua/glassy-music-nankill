@@ -420,7 +420,6 @@ const htmlContent = `
                     <li>Add fade effect for main background (MT)</li>
                     <li>Add <strong>animated artwork</strong> (BLS)</li>
                     <li>Some performance fix and optimize (BL, U) 🚀</li>
-                    <li>Now <strong>open-source</strong> 🌐</li>
                 </ul>
             </div>
             <div class="log-entry">
