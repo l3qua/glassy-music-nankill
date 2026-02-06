@@ -7,7 +7,7 @@
   "main": "./dist/main/index.js",
   "type": "module",
   "license": "MIT",
-  "repository": "pear-devs/pear-desktop",
+  "repository": "nankill/youtube-music-nankill",
   "author": {
     "name": "nankill",
     "email": "nankill@nankill.xyz",

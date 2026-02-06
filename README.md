@@ -1,34 +1,46 @@
-<div align="center" markdown="1">
-   <sup>Special thanks to:</sup>
-   <br>
-   <br>
-   <a href="https://go.warp.dev/pear-desktop">
-      <img alt="Warp sponsorship" width="400" src="https://github.com/user-attachments/assets/8307ea56-e872-494a-8a9c-de0e296a06ed" />
-   </a>
+<div align="center">
 
-### [Warp, built for coding with multiple AI agents](https://go.warp.dev/pear-desktop)
-[Available for macOS, Linux, & Windows](https://go.warp.dev/pear-desktop)<br>
+# Youtube Music (NanKill Modded)
+
+[![GitHub license](https://img.shields.io/github/license/pear-devs/pear-desktop.svg?style=for-the-badge)](https://git.nankill.xyz/nankill/youtube-music-nankill/src/branch/master/license)
+[![eslint code style](https://img.shields.io/badge/code_style-eslint-5ed9c7.svg?style=for-the-badge)](https://git.nankill.xyz/nankill/youtube-music-nankill/src/branch/master/eslint.config.mjs)
+<a href="https://github.com/pear-devs/pear-desktop">
+  <img src="https://img.shields.io/badge/Original_Repo-pear--devs%2Fpear--desktop-blue?style=for-the-badge&logo=github" alt="Original Repo">
+</a>
 
 </div>
-<hr>
 
 <div align="center">
 
-# :pear: Pear Desktop
+**A personalized fork maintained by NanKill**
 
-[![GitHub release](https://img.shields.io/github/release/pear-devs/pear-desktop.svg?style=for-the-badge)](https://github.com/pear-devs/pear-desktop/releases/)
-[![GitHub license](https://img.shields.io/github/license/pear-devs/pear-desktop.svg?style=for-the-badge)](https://github.com/pear-devs/pear-desktop/blob/master/license)
-[![eslint code style](https://img.shields.io/badge/code_style-eslint-5ed9c7.svg?style=for-the-badge)](https://github.com/pear-devs/pear-desktop/blob/master/eslint.config.mjs)
-[![Build status](https://img.shields.io/github/actions/workflow/status/pear-devs/pear-desktop/build.yml?branch=master&style=for-the-badge)](https://GitHub.com/pear-devs/pear-desktop/releases/)
-[![GitHub All Releases](https://img.shields.io/github/downloads/pear-devs/pear-desktop/total?style=for-the-badge)](https://GitHub.com/pear-devs/pear-desktop/releases/)
-<!--[![AUR](https://img.shields.io/aur/version/pear-desktop-bin?color=blueviolet&style=for-the-badge)](https://aur.archlinux.org/packages/pear-desktop-bin)-->
-[![Known Vulnerabilities](https://snyk.io/test/github/pear-devs/pear-desktop/badge.svg)](https://snyk.io/test/github/pear-devs/pear-desktop)
+![Screenshot](web/image.png "Screenshot")
+<p>
+    This project is enhanced with AI assistance from <b>Gemini 3 Pro</b>.
+</p>
+
+<hr>
+
+### ✨ What makes this version different?
 
 </div>
 
-<!--![Screenshot](web/screenshot.png "Screenshot")-->
+Here are the key improvements and features added in this build:
 
-- Native look & feel extension
+- 🎵 **Better Lyrics Integration:** Added custom themes, bug fixes, and optimization.
+- 🎨 **Better Lyrics Shader:** Enhanced visual effects with fixes and performance improvements.
+- 🛡️ **Built-in Adblock:** Enjoy music without interruptions.
+- ⏯️ **YouTube Non-Stop:** Bypassed the "Video paused. Continue watching?" prompt.
+- 🌶️ **Personal Tweaks:** Added some "extra flavor" and customizations to suit my preferences.
+
+---
+
+### 🚀 How to use?
+
+Since this is a custom build, you will need to build it yourself.
+👉 **Please check the [Build](#build) section for detailed instructions.**
+
+---
 
 > [!IMPORTANT]
 > ⚠️ Disclaimer
@@ -48,12 +60,6 @@
 ## Content
 
 - [Features](#features)
-- [Translation](#translation)
-- [Download](#download)
-  - [Arch Linux](#arch-linux)
-  - [MacOS](#macos)
-  - [Windows](#windows)
-    - [How to install without a network connection? (in Windows)](#how-to-install-without-a-network-connection-in-windows)
 - [Themes](#themes)
 - [Dev](#dev)
 - [Build your own plugins](#build-your-own-plugins)
@@ -65,70 +71,6 @@
 - [License](#license)
 - [FAQ](#faq)
 
-## Translation
-
-You can help with translation on [Hosted Weblate](https://bit.ly/48n5YF7).
-
-<a href="https://bit.ly/48n5YF7">
-  <img src="https://bit.ly/4q83L6S" alt="translation status" />
-  <img src="https://bit.ly/4h3zBxo" alt="translation status 2" />
-</a>
-
-## Download
-
-You can check out the [latest release](https://github.com/pear-devs/pear-desktop/releases/latest) to quickly find the
-latest version.
-
-### Arch Linux
-
-Install the [`pear-desktop`](https://aur.archlinux.org/packages/pear-desktop) package from the AUR. For AUR installation instructions, take a look at
-this [wiki page](https://wiki.archlinux.org/index.php/Arch_User_Repository#Installing_packages).
-
-### macOS
-
-You can install the app using Homebrew (see the [cask definition](https://github.com/pear-devs/homebrew-pear)):
-
-```bash
-brew install pear-devs/pear/pear-desktop
-```
-
-If you install the app manually and get an error "is damaged and can’t be opened." when launching the app, run the following in the Terminal:
-
-```bash
-/usr/bin/xattr -cr /Applications/Pear\ Desktop.app
-```
-
-### Windows
-
-You can use the [Scoop package manager](https://scoop.sh) to install the `pear-desktop` package from
-the [`extras` bucket](https://github.com/ScoopInstaller/Extras).
-
-```bash
-scoop bucket add extras
-scoop install extras/pear-desktop
-```
-
-Alternately you can use [Winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/), Windows 11s
-official CLI package manager to install the `pear-devs.pear-desktop` package.
-
-*Note: Microsoft Defender SmartScreen might block the installation since it is from an "unknown publisher". This is also
-true for the manual installation when trying to run the executable(.exe) after a manual download here on github (same
-file).*
-
-```bash
-winget install pear-devs.pear-desktop
-```
-
-#### How to install without a network connection? (in Windows)
-
-- Download the `*.nsis.7z` file for _your device architecture_ in [release page](https://github.com/pear-devs/pear-desktop/releases/latest).
-  - `x64` for 64-bit Windows
-  - `ia32` for 32-bit Windows
-  - `arm64` for ARM64 Windows
-- Download installer in release page. (`*-Setup.exe`)
-- Place them in the **same directory**.
-- Run the installer.
-
 ## Themes
 
 You can load CSS files to change the look of the application (Options > Visual Tweaks > Themes).
@@ -138,8 +80,8 @@ Some predefined themes are available in https://github.com/kerichdev/themes-for-
 ## Dev
 
 ```bash
-git clone https://github.com/pear-devs/pear-desktop
-cd pear-desktop
+git clone https://git.nankill.xyz/nankill/youtube-music-nankill
+cd youtube-music-nankill
 pnpm install --frozen-lockfile
 pnpm dev
 ```
@@ -309,7 +251,8 @@ Uses [Playwright](https://playwright.dev/) to test the app.
 
 ## License
 
-MIT © [pear-devs](https://github.com/pear-devs/pear-desktop)
+- MIT © [pear-devs](https://github.com/pear-devs/pear-desktop)
+- MIT © [nankill](https://git.nankill.xyz/nankill/youtube-music-nankill)
 
 ## FAQ
 
