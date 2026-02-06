@@ -116,6 +116,19 @@ ytmusic-av-toggle,
     visibility: visible !important;
 }
 
+ytmusic-player-expanding-menu,
+#expanding-menu {
+    /* Màu nền bán trong suốt (đen mờ 60%) */
+    background: rgba(0, 0, 0, 0.6) !important;
+    
+    /* Bo góc và thêm viền mỏng cho nổi bật */
+    border-radius: 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    
+    /* Đổ bóng để tách biệt khỏi nền */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}
+
 /* ============================================== */
 /* PHẦN 2: STYLE LYRIC (NO LAG EDITION)           */
 /* ============================================== */
