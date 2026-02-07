@@ -251,9 +251,8 @@ Uses [Playwright](https://playwright.dev/) to test the app.
 
 ## License
 
-- MIT © [pear-devs](https://github.com/pear-devs/pear-desktop)
-- MIT © [nankill](https://git.nankill.xyz/nankill/youtube-music-nankill)
-
+- **GPL-3.0** © [nankill](https://git.nankill.xyz/nankill/youtube-music-nankill)
+- Based on [pear-desktop](https://github.com/pear-devs/pear-desktop) (MIT © pear-devs)
 ## FAQ
 
 ### Why apps menu isn't showing up?
