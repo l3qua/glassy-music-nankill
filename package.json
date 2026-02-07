@@ -6,7 +6,7 @@
   "description": "YouTube Music - Custom mod by NanKill",
   "main": "./dist/main/index.js",
   "type": "module",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "repository": "nankill/youtube-music-nankill",
   "author": {
     "name": "nankill",
