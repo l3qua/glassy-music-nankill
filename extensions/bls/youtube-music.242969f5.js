@@ -603,9 +603,9 @@ var e, t;
               audioResponsive: !0,
               audioSpeedMultiplier: 2,
               audioBeatThreshold: 0.8,
-              pauseOnInactive: !0,
+              pauseOnInactive: !1,
               showLogs: !0,
-              showOnBrowsePages: !1,
+              showOnBrowsePages: !0,
               enableAnimatedArt: !0,
             },
             n = { speedMultiplier: 1, scaleMultiplier: 1 },
@@ -1505,7 +1505,7 @@ var e, t;
       width: 100vw;
       height: 100vh;
       pointer-events: none;
-      z-index: 0;
+      z-index: -1;
       background-color: #000;
       opacity: 0;
       will-change: opacity;
@@ -1533,7 +1533,7 @@ var e, t;
       width: 100vw;
       height: 100vh;
       pointer-events: none;
-      z-index: 0;
+      z-index: -1;
       opacity: 0;
       will-change: opacity, transform;
       transition: opacity 0.5s ease-out;

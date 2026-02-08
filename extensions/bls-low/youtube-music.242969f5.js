@@ -605,7 +605,7 @@ var e, t;
               audioBeatThreshold: 0.8,
               pauseOnInactive: !0,
               showLogs: !0,
-              showOnBrowsePages: !1,
+              showOnBrowsePages: !0,
               enableAnimatedArt: !0,
             },
             n = { speedMultiplier: 1, scaleMultiplier: 1 },
@@ -1505,7 +1505,7 @@ var e, t;
       width: 100vw;
       height: 100vh;
       pointer-events: none;
-      z-index: 0;
+      z-index: -1;
       background-color: #000;
       opacity: 0;
       will-change: opacity;
@@ -1533,7 +1533,7 @@ var e, t;
       width: 100vw;
       height: 100vh;
       pointer-events: none;
-      z-index: 0;
+      z-index: -1;
       opacity: 0;
       will-change: opacity, transform;
       transition: opacity 0.5s ease-out;
@@ -2341,32 +2341,32 @@ var e, t;
                 t.uniform1f(this.uniforms.blur.offset, 0),
                 t.drawArrays(t.TRIANGLES, 0, 6));
             }
-            resize() {
-              // --- [FIX CHO MÁY YẾU - BLS LOW] ---
-              
-              // 1. Lấy tỷ lệ khung hình thật của màn hình (Ví dụ 16:9)
-              const aspectRatio = this.canvas.clientWidth / this.canvas.clientHeight;
-              
-              // 2. Set chiều cao cố định là 128px (hoặc thấp hơn nếu muốn siêu nhẹ)
-              // Chiều rộng sẽ tự tính theo tỷ lệ để hình không bị méo
-              const targetHeight = 128; 
-              const targetWidth = targetHeight * aspectRatio;
+resize() {
+  // --- [FIX CHO MÁY YẾU - BLS LOW - ĐÃ SỬA LỖI BLACK SCREEN] ---
+  
+  // Lấy kích thước hiển thị, nếu canvas chưa có height thì dùng window
+  let w = this.canvas.clientWidth || window.innerWidth;
+  let h = this.canvas.clientHeight || window.innerHeight;
 
-              // 3. Gán kích thước render nội bộ (Render Resolution)
-              this.canvas.width = targetWidth;
-              this.canvas.height = targetHeight;
+  // Phòng trường hợp h vẫn bằng 0 (dù rất hiếm nếu dùng window.innerHeight)
+  if (h === 0) h = 1;
 
-              // Lưu ý: CSS width/height vẫn là 100% (do file css quản lý) 
-              // nên trình duyệt sẽ tự phóng to cái hình 128px này ra full màn hình.
-              // ------------------------------------
+  const aspectRatio = w / h;
+  
+  const targetHeight = 128; 
+  const targetWidth = targetHeight * aspectRatio;
 
-              let e = this.canvas.width,
-                t = this.canvas.height;
-              
-              // Hủy FBO cũ nếu có và tạo cái mới bé tí teo
-              (this.warpFBO && this.deleteFramebuffer(this.warpFBO),
-                (this.warpFBO = this.createFramebuffer(e, t, !0)));
-            }
+  this.canvas.width = targetWidth;
+  this.canvas.height = targetHeight;
+
+  // ------------------------------------
+
+  let e = this.canvas.width,
+    t = this.canvas.height;
+  
+  (this.warpFBO && this.deleteFramebuffer(this.warpFBO),
+    (this.warpFBO = this.createFramebuffer(e, t, !0)));
+}
             start() {
               this.isPlaying ||
                 ((this.isPlaying = !0),

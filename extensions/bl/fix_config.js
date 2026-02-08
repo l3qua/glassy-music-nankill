@@ -280,10 +280,6 @@ ytmusic-player-page[player-fullscreened] #side-panel {
   filter: blur(var(--home-bg-blur)) brightness(var(--home-bg-brightness)) saturate(1.2);
   opacity: 1;
   z-index: -50; /* Nằm dưới cùng */
-  
-  /* [UPSTREAM UPDATE] Thêm hiệu ứng chuyển cảnh mượt hơn */
-  transition: background 0.5s ease-in-out, filter 0.5s ease-in-out;
-  will-change: background, filter;
 }
 
 /* 2. Làm trong suốt các thành phần UI để thấy nền */
