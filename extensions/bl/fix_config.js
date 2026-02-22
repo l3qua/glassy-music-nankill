@@ -2,9 +2,9 @@
 const MY_CUSTOM_CSS = `
 
 /* =================================================================================================================*/
-/* MERGED THEME V16: Fix some problem with the new version                                                          */
-/* Adds: Blur for music/video switch when fullscreen, some cover effect                                             */
-/* Fixes: Fix some breaking change make by Better Lyrics update                                                     */
+/* MERGED THEME V17: Some UI Update                                                                                 */
+/* Adds: More rounded corner, more blur,...                                                                         */
+/* Fixes: Nope                                                                                                      */
 /* Based on: Dynamic Background (by chengg), Big Blurry Slow Lyrics for TV (by zobiron), Luxurious Glass (by SKMJi) */
 /* Made by: Gemini 3 Pro and NanKill                                                                                */
 /* ================================================================================================================ */
@@ -244,78 +244,355 @@ ytmusic-player-page[player-fullscreened] #side-panel {
 /* Chỉ lấy background và hiệu ứng kính cho Home   */
 /* Upstreamed: Added Transition Fade Logic        */
 /* ============================================== */
+/* ============================================== */
+/* BẢN CẬP NHẬT: GIAO DIỆN TRANG CHỦ (HARDCODED)  */
+/* Đã loại bỏ SCSS, gán cứng theo Default Preset  */
+/* ============================================== */
 
-:root {
-  /* Cấu hình độ mờ và sáng cho hình nền trang chủ */
-  --home-bg-blur: 70px;       /* Độ nhòe nền */
-  --home-bg-brightness: 0.7;  /* Độ tối nền (0.5 là tối, 1 là sáng gốc) */
-  --home-bg-scale: 1.2;       /* Độ phóng to ảnh nền */
-  
-  /* Cấu hình độ trong suốt của thanh công cụ */
-  --glass-ui-bg: rgba(0, 0, 0, 0.3); /* Màu nền các thanh (đen mờ) */
-  --glass-ui-blur: 15px;             /* Độ mờ đục của kính */
-  --glass-ui-border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* 1. Tạo hình nền động cho Trang Chủ (Browse) và Tìm Kiếm (Search) */
-/* Chỉ hiện khi KHÔNG mở Player toàn màn hình */
-#browse-page::before,
-#search-page::before {
-  content: "";
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  height: 120vh; /* Dư ra một chút để khi xoay không bị hở */
-  
-  /* Lấy ảnh từ bài hát đang phát (Extension cung cấp) */
-  background-image: var(--blyrics-background-img, none); 
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  
-  /* Các hiệu ứng Filter */
-  filter: blur(var(--home-bg-blur)) brightness(var(--home-bg-brightness)) saturate(1.2);
-  opacity: 1;
-  z-index: -50; /* Nằm dưới cùng */
-  
-  /* [UPSTREAM UPDATE] Thêm hiệu ứng chuyển cảnh mượt hơn */
-  transition: background 0.5s ease-in-out, filter 0.5s ease-in-out;
-  will-change: background, filter;
-}
-
-/* 2. Làm trong suốt các thành phần UI để thấy nền */
-
-/* Thanh điều hướng trên cùng (Top Bar) */
-#nav-bar-background,
-ytmusic-app-layout #nav-bar-background {
-  background: var(--glass-ui-bg) !important;
-  backdrop-filter: blur(var(--glass-ui-blur)) !important;
-  border-bottom: var(--glass-ui-border) !important;
-  transition: background 0.3s ease-in; /* Thêm transition cho mượt */
-}
-
-/* Thanh bên trái (Sidebar / Mini Guide) */
-#guide-wrapper,
-#mini-guide-background {
-  background: var(--glass-ui-bg) !important;
-  backdrop-filter: blur(var(--glass-ui-blur)) !important;
-  border-right: var(--glass-ui-border) !important;
-  transition: background 0.3s ease-in; /* Thêm transition cho mượt */
-}
-
-/* Xóa nền xám mặc định của Youtube Music ở trang chủ */
-ytmusic-browse-response[has-background] .background-gradient.ytmusic-browse-response {
-  background: transparent !important;
-  background-image: none !important;
-}
-
-/* Fix: Ẩn thanh cuộn trang chủ cho đẹp (giống Chengg) */
-html {
-  scrollbar-width: none;
+/* Xóa thanh cuộn cho gọn mắt */
+html, .scrollable-content, .scroller {
+  scrollbar-width: none !important;
 }
 body::-webkit-scrollbar {
   display: none;
 }
 
+/* 1. BACKGROUND ĐỘNG TRANG CHỦ & TÌM KIẾM */
+#browse-page::before,
+#search-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  height: 120vh;
+  background: var(--blyrics-background-img);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: scale(1.2);
+  z-index: -50;
+  /* Thông số mặc định: blur 60px, bão hòa 1.5, độ sáng 0.7 */
+  filter: blur(60px) saturate(1.5) brightness(0.7);
+  transition: background 0.3s ease-in-out;
+  will-change: background;
+}
+
+/* Fix xóa nền xám mặc định của YouTube Music */
+.background-gradient {
+  background: none !important;
+}
+ytmusic-fullbleed-thumbnail-renderer[is-background] .image {
+  mask-image: linear-gradient(transparent);
+}
+
+/* 2. THANH ĐIỀU HƯỚNG & MENU BÊN - HIỆU ỨNG KÍNH */
+#nav-bar-background.ytmusic-app-layout,
+ytmusic-app-layout.content-scrolled #nav-bar-divider {
+  opacity: 1;
+  backdrop-filter: blur(10px);
+  background: transparent;
+  border-bottom: transparent !important;
+  border-top: 0 !important;
+}
+
+ytmusic-app[is-bauhaus-sidenav-enabled] #guide-wrapper.ytmusic-app {
+  background: transparent;
+  padding: 2px;
+  border-right: transparent;
+  backdrop-filter: blur(10px);
+}
+
+#layout[player-page-open] #guide-wrapper {
+  background: transparent !important;
+  border-right: transparent !important;
+}
+#layout[player-page-open] #nav-bar-background {
+  background: transparent !important;
+  border-bottom: transparent !important;
+}
+
+ytmusic-app-layout[is-bauhaus-sidenav-enabled].content-scrolled #mini-guide-background.ytmusic-app-layout,
+ytmusic-app-layout[is-bauhaus-sidenav-enabled][player-page-open] #mini-guide-background.ytmusic-app-layout {
+  opacity: 0;
+}
+
+tp-yt-paper-item.ytmusic-guide-entry-renderer:hover {
+  background: rgba(255, 255, 255, 0.1); 
+}
+
+#divider {
+  border: 0 !important;
+}
+
+/* 3. THANH TÌM KIẾM (SEARCH BOX) MỚI */
+ytmusic-search-box .search-box {
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: transparent !important;
+}
+ytmusic-search-box .search-box .yt-icon-shape {
+  color: white;
+}
+input.ytmusic-search-box {
+  color: rgba(255, 255, 255, 0.7);
+}
+ytmusic-search-box[has-query] input.ytmusic-search-box,
+ytmusic-search-box[opened] input.ytmusic-search-box {
+  color: white;
+}
+ytmusic-search-box[has-query] input.ytmusic-search-box::placeholder,
+ytmusic-search-box[opened] input.ytmusic-search-box::placeholder {
+  color: white;
+}
+.search-container.ytmusic-search-box {
+  border-radius: 12px;
+}
+ytmusic-search-box[has-query] .search-container.ytmusic-search-box,
+ytmusic-search-box[opened] .search-container.ytmusic-search-box {
+  border-radius: 12px;
+  background: transparent !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Hiệu ứng kính cho Danh sách gợi ý tìm kiếm */
+ytmusic-search-box #suggestion-list {
+  top: 0;
+  opacity: 0;
+  visibility: hidden;
+  display: initial !important;
+  border-radius: 12px !important;
+  background: rgba(0, 0, 0, 0.6) !important; /* Đổi từ transparent sang dòng này */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border: transparent !important;
+  backdrop-filter: blur(10px) !important;
+}
+ytmusic-search-box[opened] #suggestion-list {
+  top: calc(var(--ytmusic-search-box-height) + 16px) !important;
+  opacity: 1;
+  visibility: visible;
+}
+ytmusic-search-box #suggestion-list ytmusic-search-suggestions-section {
+  background: transparent !important;
+}
+ytmusic-search-box #suggestion-list ytmusic-search-suggestion {
+  background: transparent !important;
+  color: white;
+  border-radius: 12px;
+}
+ytmusic-search-box #suggestion-list ytmusic-search-suggestion:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: white;
+}
+#suggestions .ytmusic-search-suggestions-section {
+  border-radius: 8px;
+}
+
+/* 4. NÚT BẤM VÀ CÁC THÀNH PHẦN NỔI BẬT KHÁC */
+/* Nút Tạo Playlist mới */
+.yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal {
+  background: rgba(255, 255, 255, 0.1);
+  border: transparent;
+  color: white;
+  border-radius: 16px;
+}
+.yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+.yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal .yt-icon-shape {
+  color: white;
+}
+
+/* Nút trượt danh sách (Carousel Buttons) */
+yt-icon-button.ytmusic-carousel-shelf-renderer,
+.yt-spec-button-shape-next--mono.yt-spec-button-shape-next--outline {
+  background: rgba(255, 255, 255, 0.1);
+  border: transparent;
+  color: white;
+  border-radius: 16px;
+}
+yt-icon-button.ytmusic-carousel-shelf-renderer:hover,
+.yt-spec-button-shape-next--mono.yt-spec-button-shape-next--outline:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Nút Play to trên bìa Album ở Trang chủ */
+ytmusic-play-button-renderer[size="MUSIC_PLAY_BUTTON_SIZE_HUGE"] {
+  --ytmusic-play-button-size: 40px;
+  --ytmusic-play-button-icon-size: 24px;
+}
+ytmusic-play-button-renderer[size="MUSIC_PLAY_BUTTON_SIZE_HUGE"] .content-wrapper {
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+}
+ytmusic-item-thumbnail-overlay-renderer:hover ytmusic-play-button-renderer[size="MUSIC_PLAY_BUTTON_SIZE_HUGE"] .content-wrapper {
+  opacity: 1;
+}
+ytmusic-play-button-renderer[size="MUSIC_PLAY_BUTTON_SIZE_HUGE"] .content-wrapper:hover {
+  background: black;
+}
+ytmusic-play-button-renderer[size="MUSIC_PLAY_BUTTON_SIZE_HUGE"]:is([state="paused"], [state="playing"]) .content-wrapper {
+  opacity: 1;
+}
+
+.thumbnail-overlay.ytmusic-two-row-item-renderer[content-position="MUSIC_ITEM_THUMBNAIL_OVERLAY_CONTENT_POSITION_CENTERED"] #content {
+  align-items: end;
+  justify-content: right;
+  bottom: 12px;
+  right: 12px;
+}
+
+yt-img-shadow[object-fit="CONTAIN"] img,
+.thumbnail-overlay {
+  border-radius: 8px;
+  object-fit: cover !important;
+  overflow: hidden;
+}
+
+/* Container của Menu 3 chấm */
+tp-yt-iron-dropdown.ytmusic-popup-container {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(15px);
+  border-radius: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border: transparent;
+  overflow: hidden;
+}
+
+/* Ép nền bên trong menu trong suốt để thấy được hiệu ứng kính bên ngoài */
+tp-yt-paper-listbox.ytmusic-menu-popup-renderer {
+  background: transparent;
+  border: 0;
+}
+
+/* Bo góc cho toàn bộ khung ảnh Album/Playlist ở Trang chủ */
+ytmusic-two-row-item-renderer .image-wrapper,
+ytmusic-responsive-list-item-renderer[play-button-state] {
+  border-radius: 16px; /* Bạn có thể đổi thành 8px hoặc 12px tùy sở thích */
+  overflow: hidden;
+}
+
+/* 1. Trả lại hiệu ứng fade mượt cho toàn bộ overlay mặc định của YouTube */
+ytmusic-item-thumbnail-overlay-renderer {
+  transition: opacity 0.3s ease !important;
+}
+
+/* 2. Logic gốc: Ép tàng hình nền đen của bài ĐANG PHÁT (khi không di chuột) */
+ytmusic-item-thumbnail-overlay-renderer:not([play-button-state="default"]) #background.ytmusic-item-thumbnail-overlay-renderer {
+  opacity: 0 !important;
+}
+
+/* 3. Logic gốc: Hiện lại nền đen của bài ĐANG PHÁT khi di chuột vào */
+ytmusic-item-thumbnail-overlay-renderer:not([play-button-state="default"]):hover #background.ytmusic-item-thumbnail-overlay-renderer {
+  opacity: 1 !important;
+}
+
+/* 4. Logic gốc: Lớp nền đen bo tròn bao quanh cái nút Play bự ở Trang chủ */
+ytmusic-play-button-renderer[size="MUSIC_PLAY_BUTTON_SIZE_HUGE"] .content-wrapper {
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity 0.3s ease, background 0.3s ease;
+}
+
+ytmusic-item-thumbnail-overlay-renderer #background.ytmusic-item-thumbnail-overlay-renderer {
+  transition: opacity 0.3s ease !important;
+}
+
+ytmusic-item-thumbnail-overlay-renderer:hover ytmusic-play-button-renderer[size="MUSIC_PLAY_BUTTON_SIZE_HUGE"] .content-wrapper {
+  opacity: 1;
+}
+ytmusic-play-button-renderer[size="MUSIC_PLAY_BUTTON_SIZE_HUGE"] .content-wrapper:hover {
+  background: black;
+}
+ytmusic-play-button-renderer[size="MUSIC_PLAY_BUTTON_SIZE_HUGE"]:is([state="paused"], [state="playing"]) .content-wrapper {
+  opacity: 1;
+}
+
+/* Thêm hiệu ứng mượt và phóng to nhẹ cho chính nút Play */
+ytmusic-play-button-renderer[size="MUSIC_PLAY_BUTTON_SIZE_HUGE"] .content-wrapper,
+#play-button .content-wrapper.ytmusic-play-button-renderer {
+  transition: opacity 0.3s ease, background 0.3s ease, transform 0.3s ease;
+}
+
+/* Hiệu ứng phóng to nút Play lên 1 chút khi hover giống hệt bản gốc */
+#play-button .content-wrapper.ytmusic-play-button-renderer:hover {
+  transform: scale(1.2);
+}
+
+/* ========================================================== */
+/* HIỆU ỨNG MỞ/ĐÓNG PLAYER PAGE & MINIPLAYER ĐÃ ĐƯỢC HARDCODE */
+/* ========================================================== */
+
+/* 1. Mở/đóng Player Page (Giao diện mới) */
+ytmusic-app-layout[player-page-open][is-mweb-player-bar-modernization-enabled] > [slot=player-page] {
+  animation: open-playerpage 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Ép nền Kawarp của Better Lyrics mờ đi ngay khi đóng player */
+ytmusic-app-layout:not([player-page-open]) [id^="better-lyrics-kawarp-"] {
+  opacity: 0 !important;
+  transition: opacity 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+/* Xóa bóng đổ (shadow) ngay khi player đóng để tránh bị kéo lê */
+ytmusic-app-layout:not([player-page-open]) #player,
+ytmusic-app-layout:not([player-page-open]) [slot="player-page"] {
+  transition: open-playerpage 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Ép các lớp nền Blur (đang bị position: fixed) mờ đi cùng lúc */
+ytmusic-app-layout:not([player-page-open]) ytmusic-player-page::before,
+ytmusic-app-layout:not([player-page-open]) ytmusic-player-page[is-mweb-modernization-enabled] #main-panel::before {
+  opacity: 0 !important;
+  transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+ytmusic-app-layout:not([player-page-open])[is-mweb-player-bar-modernization-enabled] > [slot=player-page] {
+  animation: collapse-playerpage 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* 2. Các transition hỗ trợ để mọi thứ đồng bộ mượt mà */
+ytmusic-player-page[is-mweb-modernization-enabled]:not([player-fullscreened]) #player.ytmusic-player-page {
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+ytmusic-player-page[is-mweb-modernization-enabled][transition-mode] #side-panel {
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+ytmusic-player-page {
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+.toggle-player-page-button {
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+/* ========================================================== */
+/* KEYFRAMES                                                  */
+/* ========================================================== */
+
+@keyframes open-playerpage {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes collapse-playerpage {
+  0% {
+    transform: translateY(0);
+  }
+  38% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(120vh);
+    opacity: 0;
+  }
+}
 /* ============================================== */
 /* FIX: XÓA NỀN GỐC (IMMERSIVE BACKGROUND)        */
 /* ============================================== */
@@ -464,7 +741,7 @@ ytmusic-player,
 `;
 
 function injectStyles() {
-    console.log("[NanKill's Skibidi Theme] Injecting MERGED THEME V16...");
+    console.log("[NanKill's Skibidi Theme] Injecting MERGED THEME V17...");
     console.log("[NanKill's Skibidi Theme] Blowing ur YT Music Client...");
     
     // Tạo thẻ <style>
