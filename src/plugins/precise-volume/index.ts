@@ -34,7 +34,7 @@ export default createPlugin({
   description: () => t('plugins.precise-volume.description'),
   restartNeeded: true,
   config: {
-    enabled: false,
+    enabled: true,
     steps: 1,
     arrowsShortcut: true,
     globalShortcuts: {

@@ -603,9 +603,9 @@ var e, t;
               audioResponsive: !0,
               audioSpeedMultiplier: 2,
               audioBeatThreshold: 0.8,
-              pauseOnInactive: !1,
+              pauseOnInactive: !0,
               showLogs: !0,
-              showOnBrowsePages: !0,
+              showOnBrowsePages: !1,
               enableAnimatedArt: !0,
             },
             n = { speedMultiplier: 1, scaleMultiplier: 1 },
@@ -1305,16 +1305,16 @@ var e, t;
         function (e, t, r) {
           var a = e('@parcel/transformer-js/src/esmodule-helpers.js');
           (a.defineInteropFlag(r),
-            a.export(r, 'createKawarp', () => w),
-            a.export(r, 'destroyKawarp', () => v),
-            a.export(r, 'updateKawarpImage', () => E),
-            a.export(r, 'updateKawarpSpeed', () => S),
-            a.export(r, 'updateKawarpSettings', () => I),
-            a.export(r, 'hasKawarp', () => _),
-            a.export(r, 'getCurrentImageUrl', () => k),
-            a.export(r, 'cleanupOrphanedKawarps', () => P),
-            a.export(r, 'pauseKawarp', () => F),
-            a.export(r, 'resumeKawarp', () => C));
+            a.export(r, 'createKawarp', () => E),
+            a.export(r, 'destroyKawarp', () => S),
+            a.export(r, 'updateKawarpImage', () => _),
+            a.export(r, 'updateKawarpSpeed', () => k),
+            a.export(r, 'updateKawarpSettings', () => P),
+            a.export(r, 'hasKawarp', () => F),
+            a.export(r, 'getCurrentImageUrl', () => C),
+            a.export(r, 'cleanupOrphanedKawarps', () => R),
+            a.export(r, 'pauseKawarp', () => M),
+            a.export(r, 'resumeKawarp', () => B));
           var i = e('@kawarp/core'),
             n = a.interopDefault(i),
             s = e('@/shared/utils/logger');
@@ -1441,7 +1441,37 @@ var e, t;
               let e = new URL(window.location.href);
               return e.searchParams.get('v');
             },
-            b = () => {
+            b = (e) => {
+              let t = e.match(/i\.ytimg\.com\/vi\/([^/]+)\//);
+              return t ? `https://i.ytimg.com/vi/${t[1]}/hqdefault.jpg` : null;
+            },
+            w = new Map(),
+            v = (e) => {
+              if (!e.includes('i.ytimg.com/vi/')) return Promise.resolve(e);
+              let t = w.get(e);
+              return t
+                ? Promise.resolve(t)
+                : new Promise((t) => {
+                    let r = new Image();
+                    ((r.onload = () => {
+                      if (120 === r.naturalWidth && 90 === r.naturalHeight) {
+                        let r = b(e);
+                        if (r) {
+                          ((0, s.logger).log(
+                            'Detected default YouTube thumbnail placeholder, using hqdefault fallback',
+                          ),
+                            w.set(e, r),
+                            t(r));
+                          return;
+                        }
+                      }
+                      (w.set(e, e), t(e));
+                    }),
+                      (r.onerror = () => t(e)),
+                      (r.src = e));
+                  });
+            },
+            T = () => {
               let e = document.querySelector('#song-image img');
               if (e?.src && !e.src.startsWith('data:') && e.naturalHeight > 0)
                 return e.src;
@@ -1454,7 +1484,7 @@ var e, t;
                 ? r.src
                 : null;
             },
-            w = async (e, t, r = 'player-page') => {
+            E = async (e, t, r = 'player-page') => {
               let a = f(r);
               if (c.has(a))
                 return (
@@ -1468,7 +1498,7 @@ var e, t;
                 ((0, s.logger).log(
                   `Kawarp already exists for ${a}, destroying first`,
                 ),
-                v(a)),
+                S(a)),
                 c.add(a));
               let o = await y(r);
               if (!o) return (c.delete(a), !1);
@@ -1574,8 +1604,9 @@ var e, t;
                 (i.targetSpeed = h),
                 (i.lastSettings = { ...e }),
                 (i.lastMultipliers = { ...t }));
-              let x = b();
-              if (x)
+              let x = T();
+              if (x) {
+                x = await v(x);
                 try {
                   (await l(i.instance, x),
                     (i.currentImageUrl = x),
@@ -1587,6 +1618,7 @@ var e, t;
                     e,
                   );
                 }
+              }
               return (
                 i.instance.start(),
                 (i.observer = new IntersectionObserver(
@@ -1613,7 +1645,7 @@ var e, t;
                 !0
               );
             },
-            v = (e) => {
+            S = (e) => {
               if (e) {
                 let t = p(e);
                 ((0, s.logger).log(`Destroying kawarp for location: ${e}`),
@@ -1649,9 +1681,9 @@ var e, t;
               } else
                 for (let e of ((0, s.logger).log('Destroying all kawarps'),
                 m.keys()))
-                  v(e);
+                  S(e);
             },
-            T = async (e, t, r) => {
+            I = async (e, t, r) => {
               if (!e.instance || !e.container) return;
               let a = e.lastSettings?.kawarpTransitionDuration ?? 1e3;
               ((e.isTransitioning = !0),
@@ -1676,15 +1708,19 @@ var e, t;
                   let t = e.pendingImageUrl;
                   ((e.pendingImageUrl = null),
                     (0, s.logger).log(`Processing queued image for ${r}:`, t),
-                    T(e, t, r));
+                    I(e, t, r));
                 }
               }, a);
             },
-            E = async (e = 'player') => {
+            _ = async (e = 'player') => {
               let t = p(e);
               if (!t.instance || !t.container) return;
-              let r = b();
-              if (r && r !== t.currentImageUrl) {
+              let r = T();
+              if (
+                r &&
+                r !== t.currentImageUrl &&
+                (r = await v(r)) !== t.currentImageUrl
+              ) {
                 if (t.isTransitioning) {
                   ((0, s.logger).log(
                     `Transition in progress for ${e}, queueing image:`,
@@ -1693,10 +1729,10 @@ var e, t;
                     (t.pendingImageUrl = r));
                   return;
                 }
-                await T(t, r, e);
+                await I(t, r, e);
               }
             },
-            S = (e, t, r) => {
+            k = (e, t, r) => {
               let a = (r) => {
                 let a = p(r);
                 if (!a.instance || !a.container) return;
@@ -1718,7 +1754,7 @@ var e, t;
               if (r) a(r);
               else for (let e of m.keys()) a(e);
             },
-            I = (e, t, r) => {
+            P = (e, t, r) => {
               let a = (r) => {
                 let a = p(r);
                 if (!a.instance || !a.container) return;
@@ -1726,7 +1762,7 @@ var e, t;
                   ((0, s.logger).log(
                     `Container for ${r} was removed from DOM, cleaning up state`,
                   ),
-                    v(r));
+                    S(r));
                   return;
                 }
                 if (h(a.lastSettings, e)) return;
@@ -1748,7 +1784,7 @@ var e, t;
               if (r) a(r);
               else for (let e of m.keys()) a(e);
             },
-            _ = (e) => {
+            F = (e) => {
               if (e) {
                 let t = p(e);
                 return (
@@ -1767,13 +1803,13 @@ var e, t;
                 )
               );
             },
-            k = () => d,
-            P = () => {
+            C = () => d,
+            R = () => {
               let e = document.querySelectorAll("[id^='better-lyrics-kawarp']");
               (e.forEach((e) => e.remove()),
                 (0, s.logger).log('Cleaned up orphaned kawarps:', e.length));
             },
-            F = (e) => {
+            M = (e) => {
               let t = (e) => {
                 let t = p(e);
                 t.instance &&
@@ -1786,7 +1822,7 @@ var e, t;
               if (e) t(e);
               else for (let e of m.keys()) t(e);
             },
-            C = (e) => {
+            B = (e) => {
               let t = (e) => {
                 let t = p(e);
                 if (!t.instance || !t.isVisible || !t.isPaused) return;

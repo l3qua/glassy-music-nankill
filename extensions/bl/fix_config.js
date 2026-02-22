@@ -2,9 +2,9 @@
 const MY_CUSTOM_CSS = `
 
 /* =================================================================================================================*/
-/* MERGED THEME V15: Upstream                                                                                       */
-/* Adds: Fade effect from Dynamic Background, transparent background for music/video switch                         */
-/* Fixes: Blue line when press ALT, some fix because new BL version break artwork when fullscreen                   */
+/* MERGED THEME V16: Fix some problem with the new version                                                          */
+/* Adds: Blur for music/video switch when fullscreen, some cover effect                                             */
+/* Fixes: Fix some breaking change make by Better Lyrics update                                                     */
 /* Based on: Dynamic Background (by chengg), Big Blurry Slow Lyrics for TV (by zobiron), Luxurious Glass (by SKMJi) */
 /* Made by: Gemini 3 Pro and NanKill                                                                                */
 /* ================================================================================================================ */
@@ -201,21 +201,16 @@ ytmusic-player-expanding-menu,
 /* PHẦN 3: FULLSCREEN MODE FIXES (NEW)            */
 /* ============================================== */
 
-/* Khi vào Fullscreen (F11) */
+/* 1. Xóa bỏ hiệu ứng kính và mở rộng tối đa không gian của side-panel */
 ytmusic-player-page[player-fullscreened] #side-panel {
-  /* 1. Xóa bỏ hiệu ứng kính, viền, bóng đổ */
   background: transparent !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
   border: none !important;
   
-  /* 2. Căn giữa tuyệt đối cho mọi tỉ lệ video (16:9 hay 1:1) */
-  margin: auto !important; 
-  align-self: center !important;
-  
-  /* Reset chiều cao để không bị giới hạn */
-  max-height: 100vh !important;
-  padding-bottom: 0 !important;
+  /* Bổ sung: Xóa khoảng trống bên ngoài và giới hạn chiều cao */
+  max-height: none !important; 
+  height: 100% !important;
 }
 
 /* ============================================== */
@@ -243,6 +238,7 @@ ytmusic-player-page[player-fullscreened] #side-panel {
     font-size: 1.5rem;
   }
 }
+
 /* ============================================== */
 /* PHẦN 5: ADD-ON TỪ CHENGG THEME (SAFE MODE)     */
 /* Chỉ lấy background và hiệu ứng kính cho Home   */
@@ -280,6 +276,10 @@ ytmusic-player-page[player-fullscreened] #side-panel {
   filter: blur(var(--home-bg-blur)) brightness(var(--home-bg-brightness)) saturate(1.2);
   opacity: 1;
   z-index: -50; /* Nằm dưới cùng */
+  
+  /* [UPSTREAM UPDATE] Thêm hiệu ứng chuyển cảnh mượt hơn */
+  transition: background 0.5s ease-in-out, filter 0.5s ease-in-out;
+  will-change: background, filter;
 }
 
 /* 2. Làm trong suốt các thành phần UI để thấy nền */
@@ -435,10 +435,36 @@ input, textarea, #input, .ytmusic-search-box {
     background-color: transparent !important; 
     color: rgba(255, 255, 255, 0.5) !important; 
 }
+
+/* 5. Hiệu ứng Blur (Kính mờ) CHỈ ÁP DỤNG KHI FULLSCREEN */
+ytmusic-player-page[player-fullscreened] .av-toggle.ytmusic-av-toggle {
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important; /* Hỗ trợ thêm cho các trình duyệt lõi Chromium */
+    background-color: rgba(0, 0, 0, 0.2) !important; /* Tùy chọn: Làm nền trong suốt hơn một chút để thấy rõ hiệu ứng blur */
+}
+
+/* ============================================== */
+/* PHẦN 6: SMOOTH TRANSITIONS (SONG/VIDEO & COVER)*/
+/* Hiệu ứng chuyển cảnh mượt mà có độ đàn hồi    */
+/* ============================================== */
+ytmusic-player,
+#player.ytmusic-player-page {
+    /* Thêm width, height và margin vào chuỗi đàn hồi */
+    transition: max-width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                margin 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                border-radius 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.4s ease !important; 
+                
+    /* Bổ sung các thuộc tính mới vào will-change để chống giật lag */
+    will-change: max-width, width, height, margin, border-radius, transform, opacity; 
+}
 `;
 
 function injectStyles() {
-    console.log("[NanKill's Skibidi Theme] Injecting MERGED THEME V15...");
+    console.log("[NanKill's Skibidi Theme] Injecting MERGED THEME V16...");
     console.log("[NanKill's Skibidi Theme] Blowing ur YT Music Client...");
     
     // Tạo thẻ <style>

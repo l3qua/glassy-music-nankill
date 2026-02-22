@@ -408,6 +408,20 @@ const htmlContent = `
 
         <div class="scroll-area">
         <div class="log-entry">
+            <div class="log-header">
+                <span class="log-version">Version 3.12.2-beta</span>
+                <span class="log-tag">BETA</span>
+            </div>
+            <ul>
+                <li>Upstreamed to commit: <code style="">658b3da</code></li>
+                <li>Updated Better Lyrics to <code>v2.2.0 stable</code></li>
+                <li>Updated Better Lyrics Shaders to <code>v1.1.4</code></li>
+                <li>Updated MERGE THEME from <span style="color:#00f2fe">v15</span> to <span style="color:#00f2fe">v16</span></li>
+                <li>Minor improvements and optimizations 🛠️</li>
+                <li>Removed Low Performance Mode for BLS 🗑️</li>
+            </ul>
+        </div>
+        <div class="log-entry">
                 <div class="log-header">
                     <span class="log-version">Version 3.12.1-beta</span>
                     <span class="log-tag">BETA</span>
@@ -442,12 +456,11 @@ const htmlContent = `
                     <li>Remove MERGE THEME dynamic background</li>
                 </ul>
             </div>
-            
             </div>
 
         <div class="credits">
-            Based on <strong>pear-desktop</strong> by <a href="#" style="pointer-events: none;">th-ch</a>.<br>
-            Source code available at <a href="https://github.com/pear-devs/pear-desktop" target="_blank">pear-devs/pear-desktop</a>
+            Based on <strong><a href="https://github.com/pear-devs/pear-desktop" target="_blank">pear-desktop</a></strong> by <a href="#" style="pointer-events: none;">th-ch</a>.<br>
+            Source code available at <a href="https://git.nankill.xyz/nankill/youtube-music-nankill" target="_blank">nankill/youtube-music-nankill</a>
         </div>
     </div>
 

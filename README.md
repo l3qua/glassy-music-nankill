@@ -28,8 +28,8 @@
 
 Here are the key improvements and features added in this build:
 
-- 🎵 **Better Lyrics Integration:** Added custom themes, bug fixes, and optimization.
-- 🎨 **Better Lyrics Shader:** Enhanced visual effects with fixes and performance improvements.
+- 🎵 **Better Lyrics Integration:** Added custom themes, bug fixes.
+- 🎨 **Better Lyrics Shader:** Enhanced visual effects with fixes.
 - 🛡️ **Built-in Adblock:** Enjoy music without interruptions.
 - ⏯️ **YouTube Non-Stop:** Bypassed the "Video paused. Continue watching?" prompt.
 - 🌶️ **Personal Tweaks:** Added some "extra flavor" and customizations to suit my preferences.
