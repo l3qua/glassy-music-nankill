@@ -1,6 +1,5 @@
 // Dán CSS theme "cucu" của bạn vào giữa 2 dấu huyền (`) ở dưới
 const MY_CUSTOM_CSS = `
-
 /* =================================================================================================================*/
 /* MERGED THEME V17: Some UI Update                                                                                 */
 /* Adds: More rounded corner, more blur, more smooth animation,...                                                  */
@@ -298,16 +297,6 @@ ytmusic-app[is-bauhaus-sidenav-enabled] #guide-wrapper.ytmusic-app {
   background: transparent;
   padding: 2px;
   border-right: transparent;
-  backdrop-filter: blur(10px);
-}
-
-#layout[player-page-open] #guide-wrapper {
-  background: transparent !important;
-  border-right: transparent !important;
-}
-#layout[player-page-open] #nav-bar-background {
-  background: transparent !important;
-  border-bottom: transparent !important;
 }
 
 ytmusic-app-layout[is-bauhaus-sidenav-enabled].content-scrolled #mini-guide-background.ytmusic-app-layout,
@@ -360,10 +349,10 @@ ytmusic-search-box #suggestion-list {
   visibility: hidden;
   display: initial !important;
   border-radius: 12px !important;
-  background: rgba(0, 0, 0, 0.6) !important; /* Đổi từ transparent sang dòng này */
+  background: rgba(0, 0, 0, 0.7) !important; /* Đổi từ transparent sang dòng này */
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   border: transparent !important;
-  backdrop-filter: blur(10px) !important;
+  transition: opacity 0.3s ease, top 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.3s;
 }
 ytmusic-search-box[opened] #suggestion-list {
   top: calc(var(--ytmusic-search-box-height) + 16px) !important;
@@ -377,6 +366,7 @@ ytmusic-search-box #suggestion-list ytmusic-search-suggestion {
   background: transparent !important;
   color: white;
   border-radius: 12px;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 ytmusic-search-box #suggestion-list ytmusic-search-suggestion:hover {
   background: rgba(255, 255, 255, 0.1) !important;
@@ -447,7 +437,19 @@ yt-img-shadow[object-fit="CONTAIN"] img,
   overflow: hidden;
 }
 
-/* Container của Menu 3 chấm */
+/* 1. KHAI BÁO HIỆU ỨNG XUẤT HIỆN */
+@keyframes menuFadeIn {
+  0% {
+    opacity: 0;
+    margin-top: -8px; /* Trượt nhẹ từ trên xuống */
+  }
+  100% {
+    opacity: 1;
+    margin-top: 0;
+  }
+}
+
+/* 2. Container của Menu 3 chấm */
 tp-yt-iron-dropdown.ytmusic-popup-container {
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(15px);
@@ -455,6 +457,9 @@ tp-yt-iron-dropdown.ytmusic-popup-container {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   border: transparent;
   overflow: hidden;
+  
+  /* THÊM DÒNG NÀY: Kích hoạt hiệu ứng xuất hiện trong 0.2 giây */
+  animation: menuFadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 /* Ép nền bên trong menu trong suốt để thấy được hiệu ứng kính bên ngoài */
@@ -521,77 +526,18 @@ ytmusic-play-button-renderer[size="MUSIC_PLAY_BUTTON_SIZE_HUGE"] .content-wrappe
 /* HIỆU ỨNG MỞ/ĐÓNG PLAYER PAGE & MINIPLAYER ĐÃ ĐƯỢC HARDCODE */
 /* ========================================================== */
 
-/* 1. Mở/đóng Player Page (Giao diện mới) */
-ytmusic-app-layout[player-page-open][is-mweb-player-bar-modernization-enabled] > [slot=player-page] {
-  animation: open-playerpage 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-/* Ép nền Kawarp của Better Lyrics mờ đi ngay khi đóng player */
-ytmusic-app-layout:not([player-page-open]) [id^="better-lyrics-kawarp-"] {
-  opacity: 0 !important;
-  transition: opacity 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-}
-
-/* Xóa bóng đổ (shadow) ngay khi player đóng để tránh bị kéo lê */
-ytmusic-app-layout:not([player-page-open]) #player,
-ytmusic-app-layout:not([player-page-open]) [slot="player-page"] {
-  transition: open-playerpage 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
 /* Ép các lớp nền Blur (đang bị position: fixed) mờ đi cùng lúc */
 ytmusic-app-layout:not([player-page-open]) ytmusic-player-page::before,
 ytmusic-app-layout:not([player-page-open]) ytmusic-player-page[is-mweb-modernization-enabled] #main-panel::before {
   opacity: 0 !important;
-  transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-}
-
-ytmusic-app-layout:not([player-page-open])[is-mweb-player-bar-modernization-enabled] > [slot=player-page] {
-  animation: collapse-playerpage 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-/* 2. Các transition hỗ trợ để mọi thứ đồng bộ mượt mà */
-ytmusic-player-page[is-mweb-modernization-enabled]:not([player-fullscreened]) #player.ytmusic-player-page {
-  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-ytmusic-player-page[is-mweb-modernization-enabled][transition-mode] #side-panel {
-  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 ytmusic-player-page {
-  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
 }
 
 .toggle-player-page-button {
   transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-}
-
-/* ========================================================== */
-/* KEYFRAMES                                                  */
-/* ========================================================== */
-
-@keyframes open-playerpage {
-  0% {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes collapse-playerpage {
-  0% {
-    transform: translateY(0);
-  }
-  38% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(120vh);
-    opacity: 0;
-  }
 }
 /* ============================================== */
 /* FIX: XÓA NỀN GỐC (IMMERSIVE BACKGROUND)        */
@@ -721,22 +667,55 @@ ytmusic-player-page[player-fullscreened] .av-toggle.ytmusic-av-toggle {
 }
 
 /* ============================================== */
-/* PHẦN 6: SMOOTH TRANSITIONS (SONG/VIDEO & COVER)*/
-/* Hiệu ứng chuyển cảnh mượt mà có độ đàn hồi    */
+/* PHẦN 6: SMOOTH TRANSITIONS & ANIMATIONS        */
 /* ============================================== */
-ytmusic-player,
-#player.ytmusic-player-page {
-    /* Thêm width, height và margin vào chuỗi đàn hồi */
-    transition: max-width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-                width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-                height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-                margin 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-                border-radius 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-                transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-                opacity 0.4s ease !important; 
-                
-    /* Bổ sung các thuộc tính mới vào will-change để chống giật lag */
-    will-change: max-width, width, height, margin, border-radius, transform, opacity; 
+
+/* --- 1. KEYFRAMES --- */
+@keyframes mp-grow {
+  0% {
+    transform: translateY(40px) scale(0.3);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes mp-shrink {
+  0% {
+    transform: scale(1.5); 
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1); 
+    opacity: 1; 
+  }
+}
+
+/* --- 2. TRẠNG THÁI FULLSCREEN --- */
+ytmusic-player[player-ui-state="FULLSCREEN"],
+ytmusic-player-page[player-fullscreened] #player.ytmusic-player-page {
+    /* Ép tắt mọi animation đang chạy lỡ dở từ miniplayer/mở player để tránh xung đột */
+    animation: none !important; 
+    transition: max-width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s,
+                opacity 0.4s ease 0.3s !important; 
+    will-change: max-width, opacity; 
+}
+
+/* --- 3. TRẠNG THÁI MỞ PLAYER BÌNH THƯỜNG --- */
+ytmusic-player-page[player-page-open]:not([player-fullscreened]) #player.ytmusic-player-page {
+    animation: mp-grow 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+    transition: none !important; 
+    will-change: transform, opacity;
+}
+
+/* --- 4. TRẠNG THÁI THU NHỎ XUỐNG MINIPLAYER --- */
+/* Đã thêm :not([player-fullscreened]) để chặn đứng hiệu ứng này khi bấm Fullscreen */
+ytmusic-player-page[mini-player-enabled]:not([player-page-open]):not([player-fullscreened]) #player.ytmusic-player-page {
+    animation: mp-shrink 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: none !important; 
+    will-change: transform, opacity;
 }
 `;
 
