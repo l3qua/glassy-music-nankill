@@ -2,7 +2,7 @@
   "name": "youtube-music-nankill-mod",
   "desktopName": "nankill.xyz.youtube.music.mod",
   "productName": "YouTube Music (NanKill Modded)",
-  "version": "3.12.2-beta.nankill",
+  "version": "3.12.3-beta.nankill",
   "description": "YouTube Music - Custom mod by NanKill",
   "main": "./dist/main/index.js",
   "type": "module",
