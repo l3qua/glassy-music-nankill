@@ -271,7 +271,7 @@ body::-webkit-scrollbar {
   z-index: -50;
   /* Thông số mặc định: blur 60px, bão hòa 1.5, độ sáng 0.7 */
   filter: blur(60px) saturate(1.5) brightness(0.7);
-  transition: background 0.3s ease-in-out;
+  transition: background 0.4s ease-in-out 0.3s;
   will-change: background;
 }
 
