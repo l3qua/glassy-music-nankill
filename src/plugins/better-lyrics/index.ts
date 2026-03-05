@@ -4,17 +4,28 @@ import { createPlugin } from '@/utils';
 
 // ID này lấy từ manifest key bạn cung cấp, hoặc bạn xem log cũ (mjfeakl...)
 // Nếu build xong mở không lên thì check log xem ID thực tế là gì rồi thay vào đây
-const EXTENSION_ID = 'effdbpeggelllpfkjppbokhmmiinhlmg'; 
+const EXTENSION_ID = 'effdbpeggelllpfkjppbokhmmiinhlmg';
 
 export default createPlugin({
   name: () => 'Better Lyrics',
   restartNeeded: true,
   config: {
     enabled: true,
+    experimentalOptimizationTrick: false,
   },
   // THÊM PHẦN NÀY: Tạo menu để mở cài đặt
-  menu: async () => {
+  menu: async ({ getConfig, setConfig }) => {
+    const config = await getConfig();
+
     return [
+      {
+        label: 'Experimental Optimization Trick (Restart Required)',
+        type: 'checkbox',
+        checked: !!config.experimentalOptimizationTrick,
+        click: (item) => {
+          setConfig({ experimentalOptimizationTrick: item.checked });
+        },
+      },
       {
         label: 'Open Settings',
         click: () => {
@@ -32,7 +43,7 @@ export default createPlugin({
           // Load trang options của extension
           // Lưu ý: options_ui/page.html là đường dẫn trong manifest bạn gửi
           const optionsUrl = `chrome-extension://${EXTENSION_ID}/options_ui/page.html`;
-          
+
           settingsWin.loadURL(optionsUrl).catch((err) => {
             console.error('Cannot open settings page:', err);
             // Fallback nếu sai đường dẫn
@@ -43,13 +54,15 @@ export default createPlugin({
     ];
   },
   backend: {
-    start() {
-      const basePath = app.isPackaged 
-        ? process.resourcesPath 
+    async start({ getConfig }) {
+      const config = await getConfig();
+      const basePath = app.isPackaged
+        ? process.resourcesPath
         : path.join(__dirname, '../../../../');
 
-      const extensionPath = path.join(basePath, 'extensions', 'bl');
-      
+      const folderName = config.experimentalOptimizationTrick ? 'bl-op' : 'bl';
+      const extensionPath = path.join(basePath, 'extensions', folderName);
+
       console.log('Loading Better Lyrics from:', extensionPath);
 
       session.defaultSession.loadExtension(extensionPath)
