@@ -222,13 +222,13 @@ async function onApiLoaded() {
                 index:
                   queueInsertPosition === 'INSERT_AFTER_CURRENT_VIDEO'
                     ? queueItems.findIndex(
-                        (it) =>
-                          (
-                            it.playlistPanelVideoRenderer ||
-                            it.playlistPanelVideoWrapperRenderer
-                              ?.primaryRenderer.playlistPanelVideoRenderer
-                          )?.selected,
-                      ) + 1 || queueItemsLength
+                      (it) =>
+                        (
+                          it.playlistPanelVideoRenderer ||
+                          it.playlistPanelVideoWrapperRenderer
+                            ?.primaryRenderer.playlistPanelVideoRenderer
+                        )?.selected,
+                    ) + 1 || queueItemsLength
                     : queueItemsLength,
                 items: result.queueDatas
                   .map((it) =>
@@ -367,7 +367,7 @@ async function onApiLoaded() {
   }
 
   // Remove upgrade button
-  if (window.mainConfig.get('options.removeUpgradeButton')) {
+  if (true) {
     const itemsSelector = 'ytmusic-guide-section-renderer #items';
     let selector = 'ytmusic-guide-entry-renderer:last-child';
 
@@ -394,14 +394,12 @@ async function onApiLoaded() {
     const style = document.createElement('style');
     style.textContent = `
       ytmusic-player-bar[is-mweb-player-bar-modernization-enabled] .middle-controls-buttons.ytmusic-player-bar, #like-button-renderer {
-        display: ${
-          likeButtonsOptions === 'hide' ? 'none' : 'inherit'
-        } !important;
+        display: ${likeButtonsOptions === 'hide' ? 'none' : 'inherit'
+      } !important;
       }
       ytmusic-player-bar[is-mweb-player-bar-modernization-enabled] .middle-controls.ytmusic-player-bar {
-        justify-content: ${
-          likeButtonsOptions === 'hide' ? 'flex-start' : 'space-between'
-        } !important;
+        justify-content: ${likeButtonsOptions === 'hide' ? 'flex-start' : 'space-between'
+      } !important;
       }`;
 
     document.head.appendChild(style);
@@ -424,7 +422,7 @@ async function onApiLoaded() {
  * Original still using ES5, so we need to define custom elements using ES5 style
  */
 const definePearTransElements = () => {
-  const PearTrans = function () {};
+  const PearTrans = function () { };
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   PearTrans.prototype = Object.create(HTMLElement.prototype);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access

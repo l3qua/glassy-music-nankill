@@ -30,10 +30,11 @@ const titleStyle = cacheNoArgs(
     box-sizing: border-box;
 
     position: fixed;
-    top: 0;
+    top: 8px;
+    left: 8px;
     z-index: 10000000;
 
-    width: 100%;
+    width: max-content;
     height: var(--menu-bar-height, 32px);
 
     display: flex;
@@ -45,7 +46,13 @@ const titleStyle = cacheNoArgs(
     color: #f1f1f1;
     font-size: 12px;
     padding: 4px 4px 4px var(--offset-left, 4px);
-    background-color: var(--titlebar-background-color, #030303);
+    background-color: color-mix(in srgb, var(--titlebar-background-color, #030303) 60%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
     user-select: none;
 
     transition:
@@ -59,7 +66,7 @@ const titleStyle = cacheNoArgs(
 
     ytmusic-app:has(ytmusic-player[player-ui-state='FULLSCREEN'])
       ~ &:not([data-show='true']) {
-      transform: translateY(calc(-1 * var(--menu-bar-height, 32px)));
+      transform: translateY(calc(-1 * (var(--menu-bar-height, 32px) + 8px)));
     }
   `,
 );

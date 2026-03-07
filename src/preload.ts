@@ -16,7 +16,7 @@ import {
 import { loadI18n, setLanguage } from '@/i18n';
 
 // @ts-expect-error dummy
-globalThis.customElements = { define() {} };
+globalThis.customElements = { define() { } };
 
 new MutationObserver((mutations, observer) => {
   for (const mutation of mutations) {

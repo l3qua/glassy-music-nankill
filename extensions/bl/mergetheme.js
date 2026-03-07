@@ -46,6 +46,7 @@ ytmusic-player-bar,
 body:has(#layout[player-ui-state="PLAYER_PAGE_OPEN"]) ytmusic-player-bar,
 body:has(#layout[player-ui-state="PLAYER_PAGE_OPEN"]) #player-bar-background {
   backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -283,12 +284,23 @@ ytmusic-fullbleed-thumbnail-renderer[is-background] .image {
   mask-image: linear-gradient(transparent);
 }
 
-/* 2. THANH ĐIỀU HƯỚNG & MENU BÊN - HIỆU ỨNG KÍNH */
-#nav-bar-background.ytmusic-app-layout,
+/* 2. THANH ĐIỀU HƯỚNG & TITLE BAR - HIỆU ỨNG KÍNH NỐI LIỀN */
+body #nav-bar-background.ytmusic-app-layout {
+  top: 0 !important;
+  height: calc(var(--ytmusic-nav-bar-height) + var(--menu-bar-height, 0px)) !important;
+  opacity: 1;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  background: transparent !important;
+  border-bottom: transparent !important;
+  border-top: 0 !important;
+}
+
 ytmusic-app-layout.content-scrolled #nav-bar-divider {
   opacity: 1;
-  backdrop-filter: blur(10px);
-  background: transparent;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  background: transparent !important;
   border-bottom: transparent !important;
   border-top: 0 !important;
 }
@@ -1115,23 +1127,23 @@ ytmusic-multi-row-list-item-renderer.ytmusic-shelf-renderer {
 `;
 
 function injectStyles() {
-    console.log("[NanKill's Skibidi Theme] Injecting MERGED THEME V17...");
-    console.log("[NanKill's Skibidi Theme] Blowing ur YT Music Client...");
-    
-    // Tạo thẻ <style>
-    const style = document.createElement('style');
-    style.id = 'force-nankill-skibidi-theme';
-    style.type = 'text/css';
-    
-    // Thêm CSS vào
-    if (style.styleSheet){
-      style.styleSheet.cssText = MY_CUSTOM_CSS;
-    } else {
-      style.appendChild(document.createTextNode(MY_CUSTOM_CSS));
-    }
+  console.log("[NanKill's Skibidi Theme] Injecting MERGED THEME V17...");
+  console.log("[NanKill's Skibidi Theme] Blowing ur YT Music Client...");
 
-    // Chèn vào đầu trang (hoặc cuối body để ghi đè mạnh hơn)
-    (document.head || document.documentElement).appendChild(style);
+  // Tạo thẻ <style>
+  const style = document.createElement('style');
+  style.id = 'force-nankill-skibidi-theme';
+  style.type = 'text/css';
+
+  // Thêm CSS vào
+  if (style.styleSheet) {
+    style.styleSheet.cssText = MY_CUSTOM_CSS;
+  } else {
+    style.appendChild(document.createTextNode(MY_CUSTOM_CSS));
+  }
+
+  // Chèn vào đầu trang (hoặc cuối body để ghi đè mạnh hơn)
+  (document.head || document.documentElement).appendChild(style);
 }
 
 // Chèn ngay lập tức

@@ -47,7 +47,7 @@ const pluginEnabledMenu = async (
   // 2. Logic "Hardcore": Nếu bị khóa, ép config luôn bật ngay lập tức
   // (Đề phòng trường hợp file config.json cũ đang lưu là false)
   if (isLocked) {
-    config.plugins.enable(plugin); 
+    config.plugins.enable(plugin);
   }
 
   return {
@@ -55,13 +55,13 @@ const pluginEnabledMenu = async (
     sublabel: isNew ? t('main.menu.plugins.new') : undefined,
     toolTip: description,
     type: 'checkbox',
-    
+
     // 3. Hiển thị dấu tích: Nếu Locked thì luôn True, ngược lại thì lấy theo config
     checked: isLocked ? true : await config.plugins.isEnabled(plugin),
-    
+
     // 4. Khóa thao tác: Nếu Locked thì Disable (xám mờ đi) để không click được
-    enabled: !isLocked, 
-    
+    enabled: !isLocked,
+
     click(item: Electron.MenuItem) {
       // Safety check: Nếu bị khóa thì không làm gì cả (dù UI đã chặn rồi)
       if (isLocked) return;
@@ -115,7 +115,7 @@ const openAboutWindow = (parentWin: BrowserWindow) => {
   });
 
   // Nội dung HTML/CSS tích hợp sẵn
-const htmlContent = `
+  const htmlContent = `
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -584,14 +584,6 @@ export const mainMenuTemplate = async (
       label: t('main.menu.options.label'),
       submenu: [
         {
-          label: t('main.menu.options.submenu.auto-update'),
-          type: 'checkbox',
-          checked: config.get('options.autoUpdates'),
-          click(item: MenuItem) {
-            config.setMenuOption('options.autoUpdates', item.checked);
-          },
-        },
-        {
           label: t('main.menu.options.submenu.resume-on-start'),
           type: 'checkbox',
           checked: config.get('options.resumeOnStart'),
@@ -625,19 +617,6 @@ export const mainMenuTemplate = async (
         {
           label: t('main.menu.options.submenu.visual-tweaks.label'),
           submenu: [
-            {
-              label: t(
-                'main.menu.options.submenu.visual-tweaks.submenu.remove-upgrade-button',
-              ),
-              type: 'checkbox',
-              checked: config.get('options.removeUpgradeButton'),
-              click(item: MenuItem) {
-                config.setMenuOption(
-                  'options.removeUpgradeButton',
-                  item.checked,
-                );
-              },
-            },
             {
               label: t(
                 'main.menu.options.submenu.visual-tweaks.submenu.custom-window-title.label',
@@ -722,74 +701,6 @@ export const mainMenuTemplate = async (
                 },
               ],
             },
-            {
-              label: t(
-                'main.menu.options.submenu.visual-tweaks.submenu.theme.label',
-              ),
-              submenu: [
-                ...((config.get('options.themes')?.length ?? 0) === 0
-                  ? [
-                      {
-                        label: t(
-                          'main.menu.options.submenu.visual-tweaks.submenu.theme.submenu.no-theme',
-                        ),
-                      },
-                    ]
-                  : []),
-                ...(config.get('options.themes')?.map((theme: string) => ({
-                  type: 'normal' as const,
-                  label: theme,
-                  async click() {
-                    const { response } = await dialog.showMessageBox(win, {
-                      type: 'question',
-                      defaultId: 1,
-                      title: t(
-                        'main.menu.options.submenu.visual-tweaks.submenu.theme.dialog.remove-theme',
-                      ),
-                      message: t(
-                        'main.menu.options.submenu.visual-tweaks.submenu.theme.dialog.remove-theme-message',
-                        { theme },
-                      ),
-                      buttons: [
-                        t(
-                          'main.menu.options.submenu.visual-tweaks.submenu.theme.dialog.button.cancel',
-                        ),
-                        t(
-                          'main.menu.options.submenu.visual-tweaks.submenu.theme.dialog.button.remove',
-                        ),
-                      ],
-                    });
-
-                    if (response === 1) {
-                      config.set(
-                        'options.themes',
-                        config
-                          .get('options.themes')
-                          ?.filter((t) => t !== theme) ?? [],
-                      );
-                      innerRefreshMenu();
-                    }
-                  },
-                })) ?? []),
-                { type: 'separator' },
-                {
-                  label: t(
-                    'main.menu.options.submenu.visual-tweaks.submenu.theme.submenu.import-css-file',
-                  ),
-                  type: 'normal',
-                  async click() {
-                    const { filePaths } = await dialog.showOpenDialog({
-                      filters: [{ name: 'CSS Files', extensions: ['css'] }],
-                      properties: ['openFile', 'multiSelections'],
-                    });
-                    if (filePaths) {
-                      config.set('options.themes', filePaths);
-                      innerRefreshMenu();
-                    }
-                  },
-                },
-              ],
-            },
           ],
         },
         {
@@ -815,40 +726,40 @@ export const mainMenuTemplate = async (
         },
         ...((is.windows() || is.linux()
           ? [
-              {
-                label: t('main.menu.options.submenu.hide-menu.label'),
-                type: 'checkbox',
-                checked: config.get('options.hideMenu'),
-                click(item) {
-                  config.setMenuOption('options.hideMenu', item.checked);
-                  if (item.checked && !config.get('options.hideMenuWarned')) {
-                    dialog.showMessageBox(win, {
-                      type: 'info',
-                      title: t(
-                        'main.menu.options.submenu.hide-menu.dialog.title',
-                      ),
-                      message: t(
-                        'main.menu.options.submenu.hide-menu.dialog.message',
-                      ),
-                    });
-                  }
-                },
+            {
+              label: t('main.menu.options.submenu.hide-menu.label'),
+              type: 'checkbox',
+              checked: config.get('options.hideMenu'),
+              click(item) {
+                config.setMenuOption('options.hideMenu', item.checked);
+                if (item.checked && !config.get('options.hideMenuWarned')) {
+                  dialog.showMessageBox(win, {
+                    type: 'info',
+                    title: t(
+                      'main.menu.options.submenu.hide-menu.dialog.title',
+                    ),
+                    message: t(
+                      'main.menu.options.submenu.hide-menu.dialog.message',
+                    ),
+                  });
+                }
               },
-            ]
+            },
+          ]
           : []) satisfies Electron.MenuItemConstructorOptions[]),
         ...((is.windows() || is.macOS()
           ? // Only works on Win/Mac
-            // https://www.electronjs.org/docs/api/app#appsetloginitemsettingssettings-macos-windows
-            [
-              {
-                label: t('main.menu.options.submenu.start-at-login'),
-                type: 'checkbox',
-                checked: config.get('options.startAtLogin'),
-                click(item) {
-                  config.setMenuOption('options.startAtLogin', item.checked);
-                },
+          // https://www.electronjs.org/docs/api/app#appsetloginitemsettingssettings-macos-windows
+          [
+            {
+              label: t('main.menu.options.submenu.start-at-login'),
+              type: 'checkbox',
+              checked: config.get('options.startAtLogin'),
+              click(item) {
+                config.setMenuOption('options.startAtLogin', item.checked);
               },
-            ]
+            },
+          ]
           : []) satisfies Electron.MenuItemConstructorOptions[]),
         {
           label: t('main.menu.options.submenu.tray.label'),
@@ -1002,25 +913,25 @@ export const mainMenuTemplate = async (
             { type: 'separator' },
             is.macOS()
               ? {
-                  label: t(
-                    'main.menu.options.submenu.advanced-options.submenu.toggle-dev-tools',
-                  ),
-                  // Cannot use "toggleDevTools" role in macOS
-                  click() {
-                    const { webContents } = win;
-                    if (webContents.isDevToolsOpened()) {
-                      webContents.closeDevTools();
-                    } else {
-                      webContents.openDevTools();
-                    }
-                  },
-                }
-              : {
-                  label: t(
-                    'main.menu.options.submenu.advanced-options.submenu.toggle-dev-tools',
-                  ),
-                  role: 'toggleDevTools',
+                label: t(
+                  'main.menu.options.submenu.advanced-options.submenu.toggle-dev-tools',
+                ),
+                // Cannot use "toggleDevTools" role in macOS
+                click() {
+                  const { webContents } = win;
+                  if (webContents.isDevToolsOpened()) {
+                    webContents.closeDevTools();
+                  } else {
+                    webContents.openDevTools();
+                  }
                 },
+              }
+              : {
+                label: t(
+                  'main.menu.options.submenu.advanced-options.submenu.toggle-dev-tools',
+                ),
+                role: 'toggleDevTools',
+              },
             {
               label: t(
                 'main.menu.options.submenu.advanced-options.submenu.edit-config-json',
