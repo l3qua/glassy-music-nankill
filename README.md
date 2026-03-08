@@ -12,7 +12,7 @@
 
 **A personalized fork maintained by NanKill**
 
-![Screenshot](web/image.png "Screenshot")
+![Screenshot](web/new.png "Screenshot")
 <p>
     This project is enhanced with AI assistance from <b>Gemini 3 Pro, Claude Opus 4.6</b>.
 </p>
