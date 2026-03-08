@@ -812,6 +812,15 @@ ytmusic-tabs#tabs .tab:not(.selected):hover {
     color: #ffffff !important;
 }
 
+
+.thumbnail-image-wrapper {
+  /* Bo tròn các góc */
+  border-radius: 12px; /* Bạn có thể tăng giảm số này, hoặc dùng 50% nếu muốn hình tròn hoàn toàn */
+  /* Đảm bảo ảnh bên trong không bị tràn ra ngoài phần góc đã bo */
+  overflow: hidden; 
+  /* Đổ bóng để tạo cảm giác nổi lên */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
+}
 /* ============================================== */
 /* 8. MENU & HỘP THOẠI (POPUPS, MENUS, DIALOGS)   */
 /* ============================================== */
