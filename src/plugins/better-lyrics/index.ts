@@ -1,5 +1,6 @@
 import { session, app, BrowserWindow } from 'electron';
 import path from 'path';
+import fs from 'fs';
 import { createPlugin } from '@/utils';
 
 // ID này lấy từ manifest key bạn cung cấp, hoặc bạn xem log cũ (mjfeakl...)
@@ -12,12 +13,36 @@ export default createPlugin({
   config: {
     enabled: true,
     experimentalOptimizationTrick: false,
+    lyricsScroll: 'spring',
   },
   // THÊM PHẦN NÀY: Tạo menu để mở cài đặt
   menu: async ({ getConfig, setConfig }) => {
     const config = await getConfig();
 
     return [
+      {
+        label: 'Lyrics Scroll (Restart Required)',
+        submenu: [
+          {
+            label: 'Normal Smooth Scroll',
+            type: 'radio',
+            checked: config.lyricsScroll === 'normal',
+            click: () => setConfig({ lyricsScroll: 'normal' }),
+          },
+          {
+            label: 'Staggered Animation',
+            type: 'radio',
+            checked: config.lyricsScroll === 'staggered',
+            click: () => setConfig({ lyricsScroll: 'staggered' }),
+          },
+          {
+            label: 'Spring Scroll',
+            type: 'radio',
+            checked: config.lyricsScroll === 'spring' || !config.lyricsScroll,
+            click: () => setConfig({ lyricsScroll: 'spring' }),
+          },
+        ],
+      },
       {
         label: 'Experimental Optimization Trick (Restart Required)',
         type: 'checkbox',
@@ -54,7 +79,7 @@ export default createPlugin({
     ];
   },
   backend: {
-    async start({ getConfig }) {
+    async start({ getConfig, window }) {
       const config = await getConfig();
       const basePath = app.isPackaged
         ? process.resourcesPath
@@ -73,6 +98,21 @@ export default createPlugin({
         .catch((err) => {
           console.error('Failed to load Better Lyrics:', err);
         });
+
+      if (config.lyricsScroll === 'staggered' || config.lyricsScroll === 'spring' || !config.lyricsScroll) {
+        const isSpring = config.lyricsScroll === 'spring' || !config.lyricsScroll;
+        const jsName = isSpring ? 'v2.js' : 'v1.js';
+        const jsPath = path.join(basePath, 'extensions', 'bl-scroll', jsName);
+
+        try {
+          const jsCode = fs.readFileSync(jsPath, 'utf8');
+          window.webContents.on('dom-ready', () => {
+            window.webContents.executeJavaScript(jsCode).catch(console.error);
+          });
+        } catch (err) {
+          console.error('Failed to load lyrics scroll script:', err);
+        }
+      }
     },
   },
 });
