@@ -25,7 +25,7 @@
 
 Here are the key improvements and features added in this build:
 
-- 🎵 **Better Lyrics Integration:** Added custom themes, bug fixes.
+- 🎵 **[Better Lyrics](https://git.nankill.xyz/nankill/better-lyrics-nankill) Integration:** Added custom themes, bug fixes.
 - 🎨 **Better Lyrics Shader:** Enhanced visual effects with fixes.
 - 🛡️ **Built-in Adblock:** Enjoy music without interruptions.
 - ⏯️ **YouTube Non-Stop:** Bypassed the "Video paused. Continue watching?" prompt.
