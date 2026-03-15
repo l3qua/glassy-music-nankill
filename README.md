@@ -216,9 +216,9 @@ export default createPlugin({
 ## Build
 
 ### 🪟 Automated Build (Windows Only & Recommended)
-We provide an automated build script ([`build.bat`](https://git.nankill.xyz/nankill/youtube-music-nankill/raw/branch/master/build.bat)) for Windows that handles everything from A to Z, including checking/installing prerequisites, cloning the repository, installing packages, and compiling the app.
+We provide an automated build script ([`build.bat`](https://git.nankill.xyz/nankill/youtube-music-nankill/src/branch/master/build.bat)) for Windows that handles everything from A to Z, including checking/installing prerequisites, cloning the repository, installing packages, and compiling the app.
 
-1. Download the [`build.bat`](https://git.nankill.xyz/nankill/youtube-music-nankill/raw/branch/master/build.bat) file to any folder on your computer.
+1. Download the [`build.bat`](https://git.nankill.xyz/nankill/youtube-music-nankill/src/branch/master/build.bat) file to any folder on your computer.
 2. Double-click `build.bat` to run it. If it prompts for Administrator privileges (required to install missing NodeJS/Git/pnpm), please allow it.
 3. Follow the on-screen prompts to select your build architecture.
 4. Once completed, your compiled portable app will be located in the `youtube-music-nankill/pack` folder.
