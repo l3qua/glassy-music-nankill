@@ -8,10 +8,8 @@ setlocal EnableDelayedExpansion
 net session >nul 2>&1
 if %errorLevel% neq 0 (
     echo Requesting Administrator privileges...
-    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
-    echo UAC.ShellExecute "%~s0", "", "", "runas", 1 >> "%temp%\getadmin.vbs"
-    "%temp%\getadmin.vbs"
-    del "%temp%\getadmin.vbs"
+    :: Use PowerShell for cleaner elevation - keeps window visible
+    powershell -Command "Start-Process cmd -ArgumentList '/c cd /d \"%~dp0\" && \"%~f0\"' -Verb RunAs"
     exit /B
 )
 
@@ -165,12 +163,22 @@ if exist "package.json" goto :SKIP_CLONE
 
 call :LOG ""
 call :LOG "Source code not found, downloading repository..."
+
+:: Backup this script before git operations (git reset will overwrite it!)
+set "BAT_BACKUP=%temp%\build_bat_backup_%RANDOM%.bat"
+copy /Y "%~f0" "!BAT_BACKUP!" >nul
+
 if not exist ".git" (
     call :RUN_AND_LOG git init
     call :RUN_AND_LOG git remote add origin https://git.nankill.xyz/nankill/youtube-music-nankill
 )
 call :RUN_AND_LOG git fetch origin master
 call :RUN_AND_LOG git reset --hard origin/master
+
+:: Restore this script so CMD keeps reading the correct file
+copy /Y "!BAT_BACKUP!" "%~f0" >nul
+del "!BAT_BACKUP!" >nul 2>&1
+
 if not exist "package.json" goto :CLONE_FAILED
 goto :SKIP_CLONE
 
