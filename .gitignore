@@ -19,3 +19,4 @@ node_modules
 .extensions
 
 build_log.txt
+cmd.txt

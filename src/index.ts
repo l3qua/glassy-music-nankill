@@ -357,6 +357,8 @@ async function createMainWindow() {
     show: false,
     webPreferences: {
       contextIsolation: true,
+      spellcheck: false,
+      v8CacheOptions: 'bypassHeatCheck',
       preload: path.join(__dirname, '..', 'preload', 'preload.cjs'),
       ...(isTesting()
         ? undefined
