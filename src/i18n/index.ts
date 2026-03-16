@@ -3,7 +3,7 @@ import i18next, { init, t as i18t, changeLanguage } from 'i18next';
 import { languageResources } from 'virtual:i18n';
 
 export const APPLICATION_NAME =
-  'YouTube Music (NanKill Modded)';
+  'Glassy Music';
 
 export const loadI18n = async () =>
   await init({

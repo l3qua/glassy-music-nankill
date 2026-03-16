@@ -104,7 +104,7 @@ const openAboutWindow = (parentWin: BrowserWindow) => {
     width: 600,
     height: 700,
     resizable: false,
-    title: "About YouTube Music (NanKill Modded)", // Hoặc "Thông tin ứng dụng"
+    title: "About Glassy Music", // Hoặc "Thông tin ứng dụng"
     minimizable: false,
     maximizable: false,
     autoHideMenuBar: true, // Ẩn menu mặc định của cửa sổ con

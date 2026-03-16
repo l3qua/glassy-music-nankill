@@ -24,10 +24,10 @@ set "LOG_FILE=%~dp0build_log.txt"
 type nul > "!LOG_FILE!"
 
 color 0B
-title NanKill Modded - Build Script
+title Glassy Music - Build Script
 
 call :LOG "========================================================"
-call :LOG "       GLASSY MUSIC (NANKILL MODDED) COMPILER"
+call :LOG "       GLASSY MUSIC COMPILER"
 call :LOG "========================================================"
 call :LOG ""
 call :LOG "========================================================"
