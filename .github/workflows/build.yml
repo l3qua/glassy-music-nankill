@@ -60,7 +60,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          sudo snap install snapcraft --classic
           sudo apt update
           pnpm release:linux
 
@@ -135,7 +134,7 @@ jobs:
         if: ${{ env.VERSION_HASH == '' }}
         uses: irongut/EditRelease@v1.2.0
         with:
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           id: ${{ steps.get_draft_release.outputs.id }}
           draft: false
           prerelease: false
