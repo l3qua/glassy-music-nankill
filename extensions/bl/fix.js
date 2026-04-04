@@ -173,8 +173,9 @@
 
 
 // =========================================================================
-// PHẦN 2: YTM IMAGE CROSSFADE (FIXED)
+// PHẦN 2: YTM IMAGE CROSSFADE (FIXED v2)
 // Mô tả: Xử lý mượt mà Crossfade kể cả khi ảnh load từ RAM Cache
+// Fix: Chống deadlock khi chuyển bài nhanh liên tục
 // =========================================================================
 
 (function () {
@@ -182,10 +183,39 @@
 
   let crossfadeState = 'IDLE'; // 3 trạng thái: IDLE, WAITING, FADING
   let activeDummy = null;      // Lưu trữ ảnh dummy duy nhất đang hoạt động
+  let generation = 0;          // Bộ đếm thế hệ - ngăn callback cũ ảnh hưởng state mới
+  let safetyTimer = null;      // Safety timeout để thoát WAITING nếu bị kẹt
+  let fadeTimer = null;        // Timer dọn dẹp sau fade
+
+  // Hàm dọn dẹp dummy cũ ngay lập tức (dùng khi cần cancel fade/waiting giữa chừng)
+  const killCurrentDummy = () => {
+    if (safetyTimer) {
+      clearTimeout(safetyTimer);
+      safetyTimer = null;
+    }
+    if (fadeTimer) {
+      clearTimeout(fadeTimer);
+      fadeTimer = null;
+    }
+    if (activeDummy) {
+      activeDummy.remove();
+      activeDummy = null;
+    }
+  };
 
   // Hàm bắt đầu hiệu ứng mờ dần
-  const startFade = (dummy) => {
+  const startFade = (dummy, gen) => {
+    // Bảo vệ: Nếu generation đã thay đổi (chuyển bài mới) thì callback này là cũ → bỏ qua
+    if (gen !== generation) return;
+    // Bảo vệ: Dummy đã bị remove hoặc không còn là active
+    if (!dummy || !dummy.parentElement || dummy !== activeDummy) return;
+
     crossfadeState = 'FADING';
+
+    if (safetyTimer) {
+      clearTimeout(safetyTimer);
+      safetyTimer = null;
+    }
 
     // Ép trình duyệt reflow (tính toán lại DOM) để nhận opacity: 1 trước khi chuyển về 0
     void dummy.offsetWidth;
@@ -193,13 +223,14 @@
     dummy.style.opacity = '0'; // Bắt đầu làm mờ
 
     // Dọn dẹp sau khi transition 0.6s kết thúc
-    setTimeout(() => {
+    fadeTimer = setTimeout(() => {
       dummy.remove();
       if (activeDummy === dummy) {
         activeDummy = null;
         crossfadeState = 'IDLE';
       }
-    }, 600);
+      fadeTimer = null;
+    }, 650); // Hơi dư 50ms so với transition 0.6s để đảm bảo
   };
 
   // Hàm dọn dẹp event listener cũ để tránh lỗi gọi lặp
@@ -209,6 +240,69 @@
       img.removeEventListener('error', img._cfLoad);
       img._cfLoad = null;
     }
+  };
+
+  // Hàm tạo dummy overlay mới
+  const createDummy = (img, oldSrc) => {
+    const dummy = document.createElement('img');
+    dummy.src = oldSrc;
+    dummy.className = 'blyrics-crossfade-dummy style-scope yt-img-shadow';
+
+    Object.assign(dummy.style, {
+      position: 'absolute',
+      inset: '0',
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+      zIndex: '5',
+      pointerEvents: 'none',
+      transition: 'opacity 0.6s ease-in-out',
+      opacity: '1'
+    });
+
+    img.parentElement.appendChild(dummy);
+    return dummy;
+  };
+
+  // Hàm gắn listener chờ ảnh load xong rồi fade
+  const waitForImageThenFade = (img, dummy, gen) => {
+    cleanupListeners(img);
+
+    // Check 1: Ảnh đã load xong rồi (cache) → fade luôn
+    if (img.complete && img.naturalWidth > 0) {
+      startFade(dummy, gen);
+      return;
+    }
+
+    // Gắn listener chờ load
+    img._cfLoad = () => {
+      cleanupListeners(img);
+      startFade(dummy, gen);
+    };
+    img.addEventListener('load', img._cfLoad);
+    img.addEventListener('error', img._cfLoad);
+
+    // Check 2 (deferred): Sau khi gắn listener, check lại lần nữa
+    // Vì có race condition: ảnh có thể load xong GIỮA LÚC check và gắn listener
+    requestAnimationFrame(() => {
+      if (gen !== generation) return; // Đã chuyển bài khác rồi
+      if (img.complete && img.naturalWidth > 0) {
+        cleanupListeners(img);
+        startFade(dummy, gen);
+      }
+    });
+
+    // Safety timeout: Nếu sau 3 giây mà vẫn WAITING → reset về IDLE
+    // Phòng trường hợp load event không bao giờ fire (network error, blob URL, v.v.)
+    safetyTimer = setTimeout(() => {
+      if (gen === generation && crossfadeState === 'WAITING') {
+        console.warn('[Crossfade] Safety timeout: WAITING stuck for 3s, resetting to IDLE');
+        cleanupListeners(img);
+        killCurrentDummy();
+        crossfadeState = 'IDLE';
+      }
+      safetyTimer = null;
+    }, 3000);
   };
 
   const observer = new MutationObserver((mutations) => {
@@ -223,48 +317,32 @@
           // Bỏ qua nếu src không hợp lệ hoặc không thực sự thay đổi
           if (!oldSrc || oldSrc === newSrc || oldSrc.startsWith('data:')) continue;
 
-          // 1. ĐANG FADE: Nếu đang chiếu hiệu ứng mà ảnh mới(nét) chen vào -> Mặc kệ, không tạo thêm dummy.
-          if (crossfadeState === 'FADING') {
-            continue;
-          }
+          // Tăng generation → vô hiệu hóa tất cả callback cũ
+          generation++;
+          const currentGen = generation;
 
-          // 2. ĐANG WAITING: Đợi load ảnh mờ mà ảnh nét lại nhào tới -> Giữ nguyên ảnh dummy cũ, chỉ đổi listener sang chờ ảnh nét.
-          if (crossfadeState === 'WAITING') {
-            cleanupListeners(img);
-          }
-          // 3. IDLE: Lúc này mới an toàn để tạo dummy overlay của bài hát cũ
-          else if (crossfadeState === 'IDLE') {
-            activeDummy = document.createElement('img');
-            activeDummy.src = oldSrc;
-            activeDummy.className = 'blyrics-crossfade-dummy style-scope yt-img-shadow';
+          // Xử lý cleanup listeners cũ (luôn cần thiết dù ở state nào)
+          cleanupListeners(img);
 
-            // Set trực tiếp CSS nội tuyến để đảm bảo ăn ngay
-            Object.assign(activeDummy.style, {
-              position: 'absolute',
-              inset: '0',
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              zIndex: '5',
-              pointerEvents: 'none',
-              transition: 'opacity 0.6s ease-in-out',
-              opacity: '1'
-            });
-
-            img.parentElement.appendChild(activeDummy);
+          if (crossfadeState === 'IDLE') {
+            // IDLE: Tạo dummy mới cho ảnh cũ, chuyển sang WAITING
+            activeDummy = createDummy(img, oldSrc);
             crossfadeState = 'WAITING';
+            waitForImageThenFade(img, activeDummy, currentGen);
           }
-
-          // 4. Xử lý trigger: Nếu ảnh đã nằm trong RAM/Cache thì fade luôn, ngược lại thì đợi tải xong.
-          if (img.complete && img.naturalWidth > 0) {
-            startFade(activeDummy);
-          } else {
-            img._cfLoad = () => {
-              startFade(activeDummy);
-              cleanupListeners(img);
-            };
-            img.addEventListener('load', img._cfLoad);
-            img.addEventListener('error', img._cfLoad);
+          else if (crossfadeState === 'WAITING') {
+            // WAITING: Đang chờ ảnh load mà chuyển bài nữa
+            // → Giữ nguyên dummy cũ (nó đang hiện ảnh trước đó, vẫn đúng về mặt visual)
+            // → Chỉ cần đổi listener sang chờ ảnh mới
+            waitForImageThenFade(img, activeDummy, currentGen);
+          }
+          else if (crossfadeState === 'FADING') {
+            // FADING: Đang fade mà chuyển bài nữa
+            // → Cancel fade cũ, bắt đầu cycle mới với oldSrc hiện tại
+            killCurrentDummy();
+            activeDummy = createDummy(img, oldSrc);
+            crossfadeState = 'WAITING';
+            waitForImageThenFade(img, activeDummy, currentGen);
           }
         }
       }
@@ -281,7 +359,7 @@
         attributeFilter: ['src'],
         attributeOldValue: true
       });
-      console.log("Crossfade V2 Observer Started!");
+      console.log("[Crossfade] V2.1 Observer Started!");
     } else {
       setTimeout(initObserver, 1000);
     }
