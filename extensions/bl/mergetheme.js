@@ -2,8 +2,8 @@
 const MY_CUSTOM_CSS = `
 /* =================================================================================================================*/
 /* MERGED THEME V19: Some UI Update                                                                                 */
-/* Adds: More smooth animation,...                                                                                  */
-/* Fixes: Nope                                                                                                      */
+/* Adds: More smooth animation, new spring scroll delay,...                                                         */
+/* Fixes: Img crossfade fix                                                                                         */
 /* Based on: Dynamic Background (by chengg), Big Blurry Slow Lyrics for TV (by zobiron), Luxurious Glass (by SKMJi) */
 /* Made by: Gemini 3 Pro and NanKill                                                                                */
 /* ================================================================================================================ */
@@ -1126,6 +1126,31 @@ ytmusic-multi-row-list-item-renderer.ytmusic-shelf-renderer {
 .subtitle.ytmusic-multi-row-list-item-renderer {
   /* Text color 2: rgba(white, 0.7) */
   color: rgba(255, 255, 255, 0.7);
+}
+
+/* ============================================== */
+/* 10. FADE IN/OUT/SLIDE THÔNG TIN BÀI HÁT CHUYỂN BÀI */
+/* ============================================== */
+.middle-controls.ytmusic-player-bar {
+  position: relative;
+}
+
+/* Transition cho các phần tử con (KHÔNG áp dụng cho overlay JS) */
+.middle-controls.ytmusic-player-bar > .thumbnail-image-wrapper,
+.middle-controls.ytmusic-player-bar > .content-info-wrapper,
+.middle-controls.ytmusic-player-bar > .middle-controls-buttons {
+  transition: opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+              transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+  will-change: opacity, transform;
+}
+
+/* Khi đang chuyển bài → ẩn nội dung gốc (overlay JS sẽ fade out thay) */
+.middle-controls.ytmusic-player-bar:has(.title[is-empty]) > .thumbnail-image-wrapper,
+.middle-controls.ytmusic-player-bar:has(.title[is-empty]) > .content-info-wrapper,
+.middle-controls.ytmusic-player-bar:has(.title[is-empty]) > .middle-controls-buttons {
+  opacity: 0 !important;
+  transform: translateY(5px) !important;
+  pointer-events: none !important;
 }
 `;
 
