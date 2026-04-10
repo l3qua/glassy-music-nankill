@@ -552,7 +552,7 @@ ytmusic-player-page[mini-player-enabled]:not([player-page-open]):not([player-ful
   margin-bottom: 20px;
   transition: opacity 0.7s ease-out, 
               filter 0.7s ease-out,
-              transform 1.66s ease-out;
+              transform 1.3s ease-out;
   white-space: pre-wrap; 
   word-break: break-word; 
   overflow-wrap: break-word;
@@ -572,7 +572,7 @@ ytmusic-player-page[mini-player-enabled]:not([player-page-open]):not([player-ful
   
   transition: opacity 0.7s ease calc(var(--blyrics-anim-delay) - 0.3s), 
               filter 0.7s ease calc(var(--blyrics-anim-delay) - 0.3s),
-              transform 1.666s ease calc(var(--blyrics-anim-delay) - 0.3s);
+              transform 1.3s ease calc(var(--blyrics-anim-delay) - 0.3s);
 }
 
 /* Hover to see Static Lyrics */

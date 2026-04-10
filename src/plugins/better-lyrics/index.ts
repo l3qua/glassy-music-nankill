@@ -12,7 +12,7 @@ export default createPlugin({
   restartNeeded: true,
   config: {
     enabled: true,
-    lyricsScroll: 'spring-delay',
+    enableV4Scroll: true,
   },
   // THÊM PHẦN NÀY: Tạo menu để mở cài đặt
   menu: async ({ getConfig, setConfig }) => {
@@ -20,33 +20,10 @@ export default createPlugin({
 
     return [
       {
-        label: 'Lyrics Scroll (Restart Required)',
-        submenu: [
-          {
-            label: 'Normal Smooth Scroll',
-            type: 'radio',
-            checked: config.lyricsScroll === 'normal',
-            click: () => setConfig({ lyricsScroll: 'normal' }),
-          },
-          {
-            label: 'Staggered Animation (v1)',
-            type: 'radio',
-            checked: config.lyricsScroll === 'staggered',
-            click: () => setConfig({ lyricsScroll: 'staggered' }),
-          },
-          {
-            label: 'Spring Scroll (v2)',
-            type: 'radio',
-            checked: config.lyricsScroll === 'spring' || !config.lyricsScroll,
-            click: () => setConfig({ lyricsScroll: 'spring' }),
-          },
-          {
-            label: 'Spring Scroll Delay (v3)',
-            type: 'radio',
-            checked: config.lyricsScroll === 'spring-delay',
-            click: () => setConfig({ lyricsScroll: 'spring-delay' }),
-          },
-        ],
+        label: 'GlassyFlow v4 (Restart Required)',
+        type: 'checkbox',
+        checked: config.enableV4Scroll !== false,
+        click: () => setConfig({ enableV4Scroll: config.enableV4Scroll === false ? true : false }),
       },
       {
         label: 'Open Settings',
@@ -95,11 +72,8 @@ export default createPlugin({
           console.error('Failed to load Better Lyrics:', err);
         });
 
-      if (config.lyricsScroll === 'staggered' || config.lyricsScroll === 'spring' || config.lyricsScroll === 'spring-delay' || !config.lyricsScroll) {
-        let jsName = 'v1.js';
-        if (config.lyricsScroll === 'spring' || !config.lyricsScroll) jsName = 'v2.js';
-        else if (config.lyricsScroll === 'spring-delay') jsName = 'v3.js';
-        const jsPath = path.join(basePath, 'extensions', 'bl-scroll', jsName);
+      if (config.enableV4Scroll !== false) {
+        const jsPath = path.join(basePath, 'extensions', 'bl-scroll', 'v4.js');
 
         try {
           const jsCode = fs.readFileSync(jsPath, 'utf8');

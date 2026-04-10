@@ -122,6 +122,7 @@
             }
 
             el.classList.add('ytm-fade-out-menu');
+            console.debug('[GlassyUI: Dialogs] 💨 Fading out menu popup');
 
             el._ytmCloseTimer = setTimeout(() => {
               el.classList.remove('ytm-fade-out-menu', 'ytm-is-fading-out');
@@ -149,6 +150,7 @@
             }
 
             el.classList.add('ytm-fade-out-dialog');
+            console.debug('[GlassyUI: Dialogs] 💨 Fading out dialog popup');
 
             el._ytmCloseTimer = setTimeout(() => {
               el.classList.remove('ytm-fade-out-dialog', 'ytm-is-fading-out');
@@ -169,6 +171,7 @@
     attributeFilter: ['opened', 'style', 'aria-hidden'],
     subtree: true
   });
+  console.info('[GlassyUI: Dialogs] Observer started. Smooth fade-outs enabled.');
 })();
 
 
@@ -220,6 +223,7 @@
     // Ép trình duyệt reflow (tính toán lại DOM) để nhận opacity: 1 trước khi chuyển về 0
     void dummy.offsetWidth;
 
+    console.info('[GlassyUI: Cover] ✨ Crossfading to new cover image...');
     dummy.style.opacity = '0'; // Bắt đầu làm mờ
 
     // Dọn dẹp sau khi transition 0.6s kết thúc
@@ -296,7 +300,7 @@
     // Phòng trường hợp load event không bao giờ fire (network error, blob URL, v.v.)
     safetyTimer = setTimeout(() => {
       if (gen === generation && crossfadeState === 'WAITING') {
-        console.warn('[Crossfade] Safety timeout: WAITING stuck for 3s, resetting to IDLE');
+        console.warn('[GlassyUI: Cover] ⚠️ Safety timeout: WAITING stuck for 3s, resetting to IDLE');
         cleanupListeners(img);
         killCurrentDummy();
         crossfadeState = 'IDLE';
@@ -327,6 +331,7 @@
           if (crossfadeState === 'IDLE') {
             // IDLE: Tạo dummy mới cho ảnh cũ, chuyển sang WAITING
             activeDummy = createDummy(img, oldSrc);
+            console.debug('[GlassyUI: Cover] ⏳ Waiting for new cover to load...');
             crossfadeState = 'WAITING';
             waitForImageThenFade(img, activeDummy, currentGen);
           }
@@ -359,7 +364,7 @@
         attributeFilter: ['src'],
         attributeOldValue: true
       });
-      console.log("[Crossfade Glassy Music] V2.1 Observer Started!");
+      console.info('[GlassyUI: Cover] Observer started. Seamless crossfade enabled.');
     } else {
       setTimeout(initObserver, 1000);
     }
@@ -511,6 +516,7 @@
     fadeOverlay = createOverlay(mc);
     if (fadeOverlay) {
       void fadeOverlay.offsetWidth; // force reflow
+      console.info('[GlassyUI: Player] 💨 Fading out old track info...');
       fadeOverlay.style.opacity = '0';
       fadeOverlay.style.transform = 'translateY(5px)';
       fadeTimer = setTimeout(killOverlay, 400);
@@ -575,6 +581,7 @@
 
         // Chỉ xử lý khi title thực sự thay đổi sang bài khác
         if (oldTitle && newTitle && oldTitle !== newTitle) {
+          console.info('[GlassyUI: Player] 🔄 Crossfading cached track info...');
           // Bài cached → Overlay (bài cũ) fade out + Children (bài mới) fade in = crossfade
           triggerFadeOut(mc);
           fadeInChildren(mc);
@@ -603,7 +610,7 @@
         resizeTimer = setTimeout(captureState, 300);
       });
 
-      console.log('[PlayerBar Fade] Observer Started!');
+      console.info('[GlassyUI: Player] Observer started. Smooth track transitions enabled.');
     } else {
       setTimeout(init, 1000);
     }
