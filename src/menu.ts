@@ -515,6 +515,21 @@ const openAboutWindow = (parentWin: BrowserWindow) => {
         <div class="scroll-area">
         <div class="log-entry">
             <div class="log-header">
+                <span class="log-version">Version 3.12.6-beta</span>
+                <span class="log-tag">BETA</span>
+            </div>
+            <ul>
+                <li>Upstreamed to commit: <code style="">6aa7cdb</code></li>
+                <li>Updated Better Lyrics to commit: <code style="">baf075d</code></li>
+                <li>Updated Better Lyrics Shaders to commit: <code style="">6ce176e</code></li>
+                <li>Updated MERGE THEME from <span style="color:#00f2fe">v19</span> to <span style="color:#00f2fe">v20</span></li>
+                <li>New tabs UI</li>
+                <li>Remove old scroll effect, new GlassyFlow v4</li>
+                <li>Fixed static lyrics not unblurring</li>
+            </ul>
+        </div>
+        <div class="log-entry">
+            <div class="log-header">
                 <span class="log-version">Version 3.12.5-beta</span>
                 <span class="log-tag">BETA</span>
             </div>

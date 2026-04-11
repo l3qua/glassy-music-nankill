@@ -1,9 +1,9 @@
 // Dán CSS theme "cucu" của bạn vào giữa 2 dấu huyền (`) ở dưới
 const MY_CUSTOM_CSS = `
 /* =================================================================================================================*/
-/* MERGED THEME V20: Major UI Update                                                                                 */
-/* Adds: GlassyFlow v4, new tabs UI                                                                                 */
-/* Fixes: Fix static lyrics                                                                                         */
+/* MERGED THEME V20: Major UI Update                                                                                */
+/* Adds: GlassyFlow v4, new tabs UI,...                                                                             */
+/* Fixes: Fix static lyrics,...                                                                                     */
 /* Based on: Dynamic Background (by chengg), Big Blurry Slow Lyrics for TV (by zobiron), Luxurious Glass (by SKMJi) */
 /* Made by: Gemini 3.1 Pro and NanKill                                                                              */
 /* ================================================================================================================ */
