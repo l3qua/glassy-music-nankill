@@ -3,7 +3,7 @@ const MY_CUSTOM_CSS = `
 /* =================================================================================================================*/
 /* MERGED THEME V20: Some UI Update                                                                                 */
 /* Adds: GlassyFlow v4, new tabs UI                                                                                 */
-/* Fixes: Nope                                                                                                      */
+/* Fixes: Fix static lyrics                                                                                         */
 /* Based on: Dynamic Background (by chengg), Big Blurry Slow Lyrics for TV (by zobiron), Luxurious Glass (by SKMJi) */
 /* Made by: Gemini 3.1 Pro and NanKill                                                                              */
 /* ================================================================================================================ */
@@ -557,6 +557,30 @@ ytmusic-player-page[mini-player-enabled]:not([player-page-open]):not([player-ful
   word-break: break-word; 
   overflow-wrap: break-word;
   max-width: 100%;
+}
+
+/* ===== NO-SYNC MODE: Tắt blur khi lyrics tĩnh/không có sync ===== */
+.blyrics-container.blyrics--no-sync > div {
+  opacity: 1 !important;
+  filter: blur(0px) !important;
+  transform: none !important;
+  transition: opacity 0.5s ease-out, filter 0.5s ease-out !important;
+}
+
+/* Animation chuyển từ no-sync (rõ) sang sync (blur) mượt mà */
+@keyframes blyricsBlurIn {
+  from {
+    opacity: 1;
+    filter: blur(0px);
+  }
+  to {
+    opacity: 0.2;
+    filter: blur(6px);
+  }
+}
+
+.blyrics-container.blyrics--entering-sync > div:not(.blyrics--animating) {
+  animation: blyricsBlurIn 0.7s ease-out forwards !important;
 }
 
 .blyrics-container > div > span {
@@ -1282,6 +1306,222 @@ ytmusic-multi-row-list-item-renderer.ytmusic-shelf-renderer {
   transform: translateY(5px) !important;
   pointer-events: none !important;
 }
+
+/* Thêm padding trái cho nút no-lyrics/LYRIC_FOOTER khi KHÔNG fullscreen */
+ytmusic-player-page:not([player-fullscreened]) .blyrics-no-lyrics-button-container {
+  padding-left: 18px;
+}
+
+/* Thêm padding trái cho dải phân loại (chips) ở up-next khi KHÔNG fullscreen */
+ytmusic-player-page:not([player-fullscreened]) ytmusic-chip-cloud-renderer#steering-chips {
+  padding-left: 18px;
+}
+
+/* =========================================================
+   GlassyUI - Side Panel Playlist Queue Design
+   ========================================================= */
+
+/* 1. Container: Bóp vào trong bằng margin để không chạm viền */
+#contents.ytmusic-player-queue {
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 8px 6px !important;
+  border-radius: 20px !important;
+  overflow-y: overlay !important;
+}
+
+/* 2. Trạng thái mặc định của Item */
+ytmusic-player-queue-item {
+  display: flex !important;
+  align-items: center !important;
+  padding: 8px 12px !important;
+  border-radius: 12px !important;
+  background: transparent !important;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  cursor: pointer !important;
+  border: 1px solid transparent !important;
+  margin: 4px 20px !important; /* Đảm bảo an toàn 2 bên ở mọi mục */
+  box-sizing: border-box !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* 3. Hover Item: NỔI LÊN (Scale & Shadow) thay vì lướt ngang */
+ytmusic-player-queue-item:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: saturate(110%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  transform: translateY(-2px) scale(1.02) !important; /* Scale và bay lên */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
+  z-index: 5 !important;
+}
+
+/* 4. Trạng thái đang phát (Playing/Selected): Khối nổi 3D, Gradient & Glow */
+ytmusic-player-queue-item[selected=""] {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1)) !important;
+  backdrop-filter: saturate(120%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  transform: scale(1.02) !important;
+  margin-top: 6px !important;
+  margin-bottom: 10px !important;
+  z-index: 4 !important;
+}
+
+ytmusic-player-queue-item[selected=""]:hover {
+  transform: translateY(-2px) scale(1.03) !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05)) !important;
+}
+
+/* 5. Typography (Song Info) */
+ytmusic-player-queue-item .song-info {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  flex-grow: 1 !important;
+  overflow: hidden !important;
+}
+
+ytmusic-player-queue-item .song-title {
+  color: rgba(255, 255, 255, 0.9) !important;
+  letter-spacing: 0.3px !important;
+  margin-bottom: 2px !important;
+  transition: color 0.3s, text-shadow 0.3s !important;
+}
+
+ytmusic-player-queue-item .byline {
+  color: rgba(255, 255, 255, 0.45) !important;
+  transition: color 0.3s !important;
+}
+ytmusic-player-queue-item:hover .byline {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+ytmusic-player-queue-item[selected=""] .byline {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* =========================================================
+   GlassyUI - Queue Header & Autoplay Footer Design
+   ========================================================= */
+
+/* Queue Header ("Playing from") */
+ytmusic-queue-header-renderer {
+  margin: 12px 14px 12px 14px !important;
+  padding: 16px 20px !important;
+  background: rgba(20, 20, 20, 0.2) !important;
+  backdrop-filter: saturate(180%) !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+ytmusic-queue-header-renderer .container-name.ytmusic-queue-header-renderer {
+  gap: 4px !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+ytmusic-queue-header-renderer .title.ytmusic-queue-header-renderer {
+  color: rgba(255, 255, 255, 0.5) !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+}
+
+ytmusic-queue-header-renderer .subtitle.ytmusic-queue-header-renderer {
+  color: rgba(255, 255, 255, 0.95) !important;
+  letter-spacing: 0.3px !important;
+  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Save Button inside Header */
+ytmusic-queue-header-renderer ytmusic-chip-cloud-chip-renderer {
+  background: transparent !important;
+  border: none !important;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+ytmusic-queue-header-renderer ytmusic-chip-cloud-chip-renderer:hover {
+  transform: scale(1.05) !important;
+}
+
+ytmusic-queue-header-renderer .gradient-box.ytmusic-chip-cloud-chip-renderer {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 12px !important;
+  padding: 0 14px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+ytmusic-queue-header-renderer .gradient-box.ytmusic-chip-cloud-chip-renderer:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+}
+
+ytmusic-queue-header-renderer a.yt-simple-endpoint.ytmusic-chip-cloud-chip-renderer {
+  background: transparent !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  text-decoration: none !important;
+}
+
+ytmusic-queue-header-renderer yt-icon.ytmusic-chip-cloud-chip-renderer {
+  color: rgba(255, 255, 255, 0.9) !important;
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0 !important;
+}
+
+ytmusic-queue-header-renderer .text.ytmusic-chip-cloud-chip-renderer {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Autoplay Footer */
+.autoplay.ytmusic-tab-renderer {
+  margin: 12px 14px 12px 14px !important;
+  padding: 16px 20px !important;
+  background: rgba(20, 20, 20, 0.2) !important;
+  backdrop-filter: saturate(180%) !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+.autoplay.ytmusic-tab-renderer:not([hidden]) {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.autoplay.ytmusic-tab-renderer[hidden],
+.autoplay.ytmusic-tab-renderer[style*="display: none"] {
+  display: none !important;
+}
+
+.autoplay.ytmusic-tab-renderer .title.ytmusic-tab-renderer {
+  color: rgba(255, 255, 255, 0.9) !important;
+  letter-spacing: 0.3px !important;
+}
+
+.autoplay.ytmusic-tab-renderer .subtitle.ytmusic-tab-renderer {
+  color: rgba(255, 255, 255, 0.5) !important;
+  margin-top: 4px !important;
+}
+
+/* Autoplay Toggle Switch Styling */
+.autoplay.ytmusic-tab-renderer tp-yt-paper-toggle-button {
+  --paper-toggle-button-checked-bar-color: rgba(255, 255, 255, 0.4) !important;
+  --paper-toggle-button-checked-button-color: #fff !important;
+  --paper-toggle-button-checked-ink-color: rgba(255, 255, 255, 0.2) !important;
+  --paper-toggle-button-unchecked-bar-color: rgba(255, 255, 255, 0.1) !important;
+  --paper-toggle-button-unchecked-button-color: rgba(255, 255, 255, 0.4) !important;
+}
+/* Autoplay Indicator inside Queue List */
+div.autoplay.ytmusic-player-queue {
+  padding-left: 12px !important;
+}
 `;
 
 function injectStyles() {
@@ -1421,20 +1661,143 @@ function setupFooterDockingObserver() {
   window.addEventListener('resize', scheduleDock);
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ *  NO-SYNC DETECTION — Phát hiện lyrics tĩnh/không sync
+ *
+ *  BetterLyrics luôn đặt `data-time` và `data-duration` trên mỗi dòng:
+ *    - Synced: data-duration có giá trị thực ("5.3", "2.1", ...)
+ *    - Static: data-duration = "0" cho TẤT CẢ các dòng
+ *
+ *  Logic: Check xem có .blyrics--line nào có data-duration != "0" không.
+ *    - Có → synced → giữ blur.
+ *    - Không có → static → bỏ blur.
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+let noSyncContainer = null;
+let noSyncObserver = null;
+let isNoSyncMode = false;
+
+let noSyncTransitionTimer = null;
+
+function setNoSyncMode(container, enabled) {
+  if (isNoSyncMode === enabled) return;
+  const wasNoSync = isNoSyncMode;
+  isNoSyncMode = enabled;
+
+  // Cleanup transition timer nếu đang chạy
+  if (noSyncTransitionTimer) {
+    clearTimeout(noSyncTransitionTimer);
+    noSyncTransitionTimer = null;
+    container.classList.remove('blyrics--entering-sync');
+  }
+
+  if (enabled) {
+    // Chuyển sang no-sync: hiện rõ tất cả lyrics
+    container.classList.add('blyrics--no-sync');
+    console.info('[GlassyUI] 🔇 No-sync detected (all lines data-duration=0) — blur disabled.');
+  } else {
+    // Chuyển sang sync: blur lại
+    container.classList.remove('blyrics--no-sync');
+
+    // Nếu trước đó đang là no-sync → thêm animation mượt
+    if (wasNoSync) {
+      container.classList.add('blyrics--entering-sync');
+      noSyncTransitionTimer = setTimeout(() => {
+        container.classList.remove('blyrics--entering-sync');
+        noSyncTransitionTimer = null;
+      }, 750); // hơi dư so với animation 0.7s
+    }
+
+    console.info('[GlassyUI] 🎵 Synced lyrics detected (data-duration > 0 found) — blur enabled.');
+  }
+}
+
+function checkSyncState(container) {
+  if (!container || !container.isConnected) return;
+  // Synced: ít nhất 1 dòng có data-duration khác "0"
+  // Static: TẤT CẢ dòng đều có data-duration="0"
+  const hasSyncedLine = container.querySelector('.blyrics--line[data-duration]:not([data-duration="0"])');
+  setNoSyncMode(container, !hasSyncedLine);
+}
+
+function startNoSyncDetection(container) {
+  // Cleanup cũ
+  if (noSyncObserver) {
+    noSyncObserver.disconnect();
+    noSyncObserver = null;
+  }
+  if (noSyncContainer && noSyncContainer !== container) {
+    noSyncContainer.classList.remove('blyrics--no-sync');
+  }
+  noSyncContainer = container;
+  isNoSyncMode = false;
+
+  // Check ngay lập tức
+  checkSyncState(container);
+
+  // Observer theo dõi khi nội dung thay đổi (lines được thêm/xóa khi đổi bài)
+  noSyncObserver = new MutationObserver(() => {
+    if (!container.isConnected) return;
+    checkSyncState(container);
+  });
+
+  noSyncObserver.observe(container, {
+    childList: true,
+    subtree: true,
+  });
+}
+
+let noSyncDomObserver = null;
+function setupNoSyncDomObserver() {
+  if (noSyncDomObserver) return;
+
+  console.info('[GlassyUI] Starting no-sync detection observer...');
+
+  let lastContainer = null;
+  let domCheckQueued = false;
+
+  noSyncDomObserver = new MutationObserver(() => {
+    if (domCheckQueued) return;
+    domCheckQueued = true;
+    queueMicrotask(() => {
+      domCheckQueued = false;
+      const container = document.querySelector('.blyrics-container');
+      if (container && container !== lastContainer) {
+        lastContainer = container;
+        startNoSyncDetection(container);
+      }
+    });
+  });
+
+  noSyncDomObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+
+  // Check ngay nếu container đã tồn tại
+  const existing = document.querySelector('.blyrics-container');
+  if (existing) {
+    lastContainer = existing;
+    startNoSyncDetection(existing);
+  }
+}
+
 // Chèn ngay lập tức
 injectStyles();
 dockBetterLyricsFooterToTabs();
 setupFooterDockingObserver();
+setupNoSyncDomObserver();
 
 // Chèn lại lần nữa khi trang load xong (đề phòng bị extension ghi đè)
 window.addEventListener('DOMContentLoaded', () => {
   injectStyles();
   dockBetterLyricsFooterToTabs();
   setupFooterDockingObserver();
+  setupNoSyncDomObserver();
 });
 
 window.addEventListener('load', () => {
   injectStyles();
   dockBetterLyricsFooterToTabs();
   setupFooterDockingObserver();
+  setupNoSyncDomObserver();
 });

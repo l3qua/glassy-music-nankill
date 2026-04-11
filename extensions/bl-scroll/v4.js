@@ -177,6 +177,10 @@
     let lastFrameTs = 0;
     let activeLines = new Set();
 
+    // v4: No-sync detection — tự disable khi lyrics tĩnh
+    let isNoSyncMode = false;
+    let noSyncClassObserver = null;
+
     /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
      *  HELPERS
      * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
@@ -390,7 +394,7 @@
      * Được gọi SAU khi delay timer hết hoặc ngay lập tức nếu scrollDelay = 0.
      */
     function _executeScroll(delta) {
-        if (!isScriptEnabled || Math.abs(delta) < CFG.minDelta) return;
+        if (!isScriptEnabled || isNoSyncMode || Math.abs(delta) < CFG.minDelta) return;
 
         if (isAnimationBusy) {
             // ╔══════════════════════════════════════════════════════════╗
@@ -485,7 +489,7 @@
      * Nếu CFG.scrollDelay = 0: gọi _executeScroll ngay.
      */
     function handleNewDelta(delta) {
-        if (!isScriptEnabled || Math.abs(delta) < CFG.minDelta) return;
+        if (!isScriptEnabled || isNoSyncMode || Math.abs(delta) < CFG.minDelta) return;
 
         // Không delay → thực hiện ngay
         if (CFG.scrollDelay <= 0) {
@@ -639,6 +643,9 @@
         installStyleObserver(el);
         installScrollFallback(el);
         setScrollOverride(true);
+
+        // No-sync detection: đợi rồi check
+        startNoSyncDetection(el);
     }
 
     function boot() {
@@ -686,6 +693,54 @@
         timeScale = 1.0;
         lastRefIndex = -1;
         setContainerCompensation(0);
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     *  NO-SYNC DETECTION — disable khi lyrics tĩnh
+     *
+     *  BetterLyrics luôn đặt `data-time` và `data-duration` trên mỗi dòng:
+     *    - Synced: data-duration có giá trị thực (≠ "0")
+     *    - Static: data-duration = "0" cho TẤT CẢ dòng
+     * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+    function setNoSyncState(enabled) {
+        if (isNoSyncMode === enabled) return;
+        isNoSyncMode = enabled;
+        if (enabled) {
+            // Disable scroll: cho BL tự scroll bình thường
+            setScrollOverride(false);
+            cleanupAllSprings();
+            console.info('[GlassyFlow v4] 🔇 No-sync detected (all lines data-duration=0) — spring scroll disabled.');
+        } else {
+            // Re-enable scroll
+            setScrollOverride(true);
+            console.info('[GlassyFlow v4] 🎵 Synced lyrics detected (data-duration > 0 found) — spring scroll re-enabled.');
+        }
+    }
+
+    function startNoSyncDetection(el) {
+        // Cleanup previous
+        if (noSyncClassObserver) {
+            noSyncClassObserver.disconnect();
+            noSyncClassObserver = null;
+        }
+        isNoSyncMode = false;
+
+        // Check ngay lập tức
+        const hasSyncedLine = el.querySelector('.blyrics--line[data-duration]:not([data-duration="0"])');
+        setNoSyncState(!hasSyncedLine);
+
+        // Observer: theo dõi khi nội dung thay đổi (lines được thêm/xóa khi đổi bài)
+        noSyncClassObserver = new MutationObserver(() => {
+            if (!el.isConnected) return;
+            const synced = el.querySelector('.blyrics--line[data-duration]:not([data-duration="0"])');
+            setNoSyncState(!synced);
+        });
+
+        noSyncClassObserver.observe(el, {
+            childList: true,
+            subtree: true,
+        });
     }
 
     /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
