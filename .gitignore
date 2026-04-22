@@ -20,9 +20,8 @@ node_modules
 
 build_log.txt
 
-/extensions-src/better-lyrics/node_modules
-/extensions-src/better-lyrics/dist
-
-/extensions-src/shaders/node_modules
-/extensions-src/shaders/.plasmo
-/extensions-src/shaders/build
+/extensions-src/better-lyrics-glassy/node_modules
+/extensions-src/better-lyrics-glassy/dist
+/extensions-src/shaders-glassy/node_modules
+/extensions-src/shaders-glassy/.plasmo
+/extensions-src/shaders-glassy/build
